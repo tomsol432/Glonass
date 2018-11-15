@@ -1,0 +1,19 @@
+﻿<Window x:Name="MainWindow1" x:Class="Glonass.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Glonass"
+        mc:Ignorable="d"
+        Title="Glonass" Height="900" Width="1600" Background="#FF252525">
+    <Grid x:Name="MainGrid" Margin="-5,0,2,-2">
+        <Canvas x:Name="CanvasMap" Margin="10,10,330,3" Loaded="CanvasMap_Loaded"/>
+        <Button x:Name="ButtonGenerate" Content="Generate" Margin="0,10,10,0" VerticalAlignment="Top" Click="ButtonGenerate_Click" HorizontalAlignment="Right" Width="315"/>
+        <Slider x:Name="SliderCitiesCounter" Margin="0,35,10,0" VerticalAlignment="Top" RenderTransformOrigin="1.477,1.101" Height="22" Value="2" Minimum="4" Maximum="50" ValueChanged="SliderCitiesCounter_ValueChanged" SmallChange="1" IsSnapToTickEnabled="True" HorizontalAlignment="Right" Width="315"/>
+        <TextBox x:Name="tbLog" HorizontalAlignment="Right" Margin="0,0,10,10" TextWrapping="Wrap" Width="299" Height="646" VerticalAlignment="Bottom" TextChanged="tbLog_TextChanged" Background="{x:Null}" Foreground="White" BorderBrush="{x:Null}"/>
+        <Button x:Name="ButtonSlove" Content="Solve" Margin="0,62,10,0" VerticalAlignment="Top" Click="ButtonSlove_Click" HorizontalAlignment="Right" Width="315"/>
+        <Button x:Name="ButtonStopSolving" Content="Stop" HorizontalAlignment="Right" Margin="0,87,10,0" VerticalAlignment="Top" Width="315" Click="ButtonStopSolving_Click"/>
+        <Button x:Name="ButtonShowBest" Content="Show best" Margin="0,112,10,0" VerticalAlignment="Top" Height="22" Click="ButtonShowBest_Click" HorizontalAlignment="Right" Width="315"/>
+
+    </Grid>
+</Window>
