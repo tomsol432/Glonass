@@ -70,7 +70,7 @@ namespace Glonass
         {
             for (int i = 0; i < array.Length - 1; i++)
             {
-
+                //works almost ok
                 Line line = new Line()
                 {
                     X1 = array[i].X,
