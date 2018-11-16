@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -211,9 +212,10 @@ namespace Glonass
             PopulationChildrenData = new List<GenVector>();
             List<GenVector> SortedPopulationList = Population.OrderBy(o => o.TotalRoad).ToList();
             
-            for (int i = 0; i < SortedPopulationList.Count - (int)(SortedPopulationList.Count * 0.5); i++)
+            for (int i = 0; i < SortedPopulationList.Count - (int)(SortedPopulationList.Count * 0.6); i++)
             {
                 PopulationChildrenData.Add(SortedPopulationList[i]);
+               // SortedPopulationList.Remove(SortedPopulationList[i]);
 
             }
             
@@ -223,10 +225,13 @@ namespace Glonass
                 PopulationChildrenData.Add(new GenVector(i,dataSet, order));
             }
             PopulationData = PopulationChildrenData;
-            foreach (var item in PopulationData)
-            {
-                item.MutateOrder();
-            }
+            
+                foreach (var item in PopulationData)
+                {
+                    item.MutateOrder();
+                }
+            
+            
 
         }
         

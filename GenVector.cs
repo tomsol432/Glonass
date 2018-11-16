@@ -56,7 +56,6 @@ namespace Glonass
                     totalRoad += Math.Sqrt((a * a) + (b * b));
                 }
             }
-            //tb.AppendText(totalRoad + " \r\n");
             
 
         }
@@ -64,7 +63,7 @@ namespace Glonass
         {
             int[] temp;
             int pick = random.Next(0, 100);
-            if (pick > 50)
+            if (pick > 0)
             {
                 temp = Randomiize2ArrayOrder();
                 return temp;
@@ -76,13 +75,13 @@ namespace Glonass
         }
         public int[] Randomiize2ArrayOrder()
         {
-           
-            for (int t = 0; t < Math.Ceiling(order.Length - (order.Length * 0.8)); t++)
+            int randomPlace1 = random.Next(0, order.Length);
+            int randomPlace2 = random.Next(0, order.Length);
+            for (int t = 0; t < Math.Ceiling(order.Length - (order.Length * 0.2)); t++)
             {
-                var tmp = order[t];
-                int place = random.Next(0, order.Length);
-                order[t] = order[place];
-                order[place] = tmp;
+                var tmp = order[randomPlace1];
+                order[randomPlace1] = order[randomPlace2];
+                order[randomPlace2] = tmp;
             }
             return order;
 

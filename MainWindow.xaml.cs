@@ -31,7 +31,7 @@ namespace Glonass
         Vector[] sweetRoad;
         List<Vector[]> AllCombinations = new List<Vector[]>();
         Thread threadGen;
-        Genetics Genetics;
+        Genetics genetics;
         #endregion
         #region BrushDef
         SolidColorBrush cityBrush = new SolidColorBrush(Color.FromRgb( 0, 55, 255));
@@ -273,22 +273,25 @@ namespace Glonass
         {
             
             CanvasMap.Children.Clear();
-            Genetics = new Genetics(ref CanvasMap, (int)SliderCitiesCounter.Value);
-            Genetics.GenerateDataSet();
-            Genetics.PushCitiesDataToAllObjects();
-            Genetics.Shake(Genetics.PopulationData1);
-            Genetics.DrawGenCities(ref CanvasMap, firstCity);
-            Genetics.DrawGenRoads(CanvasMap, roadBrush);
+            
+                genetics = new Genetics(ref CanvasMap, (int)SliderCitiesCounter.Value);
+                genetics.GenerateDataSet();
+                genetics.PushCitiesDataToAllObjects();
+                genetics.Shake(genetics.PopulationData1);
+                genetics.DrawGenCities(ref CanvasMap, firstCity);
+                genetics.DrawGenRoads(CanvasMap, roadBrush);
+            
+        
             
         }
        
         private void ButtonDebug_Click(object sender, RoutedEventArgs e)
         {
             CanvasMap.Children.Clear();
-            Genetics.Shake(Genetics.PopulationData1);
-            Genetics.DrawGenCities(ref CanvasMap, firstCity);
-            Genetics.DrawGenRoads(CanvasMap, roadBrush);
-            Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1,tbLog,CanvasMap,sweetBrush,100000);
+            //Genetics.Shake(Genetics.PopulationData1);
+            //Genetics.DrawGenCities(ref CanvasMap, firstCity);
+            //Genetics.DrawGenRoads(CanvasMap, roadBrush);
+            //Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1,tbLog,CanvasMap,sweetBrush,100000);
            
             
            
@@ -299,10 +302,13 @@ namespace Glonass
             tbLog.Clear();
             
             threadGen = new Thread(() => {
-                for (int i = 0; i < 1000000; i++)
-                {
-                    Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1, tbLog, CanvasMap, sweetBrush,i);
-                }
+                
+                    for (int j = 0; j < 100000000; j++)
+                    {
+                        genetics.CalculateRoadForEachElementInPopulation(genetics.PopulationData1, tbLog, CanvasMap, sweetBrush, j);
+                    }
+                    
+                
             });
             threadGen.Start();
             
@@ -313,8 +319,11 @@ namespace Glonass
         {
             threadGen.Abort(null);
             CanvasMap.Children.Clear();
-            Genetics.DrawGenCities(ref CanvasMap, cityBrush);
-            Genetics.DrawBestRoads(CanvasMap, sweetBrush, tbLog);
+            
+                genetics.DrawGenCities(ref CanvasMap, cityBrush);
+                genetics.DrawBestRoads(CanvasMap, sweetBrush, tbLog);
+            
+            
         }
     }
 }
