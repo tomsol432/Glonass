@@ -30,7 +30,7 @@ namespace Glonass
         Vector[] Roads;
         Vector[] sweetRoad;
         List<Vector[]> AllCombinations = new List<Vector[]>();
-
+        Thread threadGen;
         Genetics Genetics;
         #endregion
         #region BrushDef
@@ -288,7 +288,7 @@ namespace Glonass
             Genetics.Shake(Genetics.PopulationData1);
             Genetics.DrawGenCities(ref CanvasMap, firstCity);
             Genetics.DrawGenRoads(CanvasMap, roadBrush);
-            Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1,tbLog,CanvasMap,sweetBrush);
+            Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1,tbLog,CanvasMap,sweetBrush,100000);
            
             
            
@@ -298,13 +298,23 @@ namespace Glonass
         {
             tbLog.Clear();
             
-            Thread thread = new Thread(() => {
-
-                Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1, tbLog,CanvasMap,sweetBrush);
+            threadGen = new Thread(() => {
+                for (int i = 0; i < 1000000; i++)
+                {
+                    Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1, tbLog, CanvasMap, sweetBrush,i);
+                }
             });
-            thread.Start();
+            threadGen.Start();
             
             
+        }
+
+        private void buttonStopThread_Click(object sender, RoutedEventArgs e)
+        {
+            threadGen.Abort(null);
+            CanvasMap.Children.Clear();
+            Genetics.DrawGenCities(ref CanvasMap, cityBrush);
+            Genetics.DrawBestRoads(CanvasMap, sweetBrush, tbLog);
         }
     }
 }

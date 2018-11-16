@@ -72,6 +72,10 @@ namespace Glonass
         }
         public void DrawBestRoads(Canvas CanvasMap, SolidColorBrush colorBrush, TextBox log)
         {
+            CanvasMap.Dispatcher.Invoke(new Action(() => 
+            {
+                CanvasMap.Children.Clear();
+            }));
 
             for (int i = 0; i < dataSet.Length - 1; i++)
             {
@@ -105,12 +109,14 @@ namespace Glonass
                         CanvasMap.Dispatcher.Invoke(new Action(() => { CanvasMap.Children.Add(line2); }));
 
                     }
-                    log.Dispatcher.Invoke(new Action(() =>
-                    {
-                        log.Text += shortestDistance + "\r\n";
-                    }));
+                    
                 }));
-               
+                log.Dispatcher.Invoke(new Action(() =>
+                {
+                    log.Clear();
+                    log.Text += shortestDistance + "\r\n";
+                }));
+
             }
 
         }
@@ -168,7 +174,7 @@ namespace Glonass
 
         }
         
-        public void CalculateRoadForEachElementInPopulation(List<GenVector> Population, TextBox tb, Canvas canvas, SolidColorBrush solidColorBrush)
+        public void CalculateRoadForEachElementInPopulation(List<GenVector> Population, TextBox tb, Canvas canvas, SolidColorBrush solidColorBrush,int counter)
         {
             foreach (var item in Population)
             {
@@ -176,7 +182,10 @@ namespace Glonass
             }
             PickShortestDistance(Population);
             SelectNextPopulationObjects(Population);
-            DrawBestRoads(canvas, solidColorBrush, tb);
+            if (counter % 100000 == 0)
+            {
+                DrawBestRoads(canvas, solidColorBrush, tb);
+            }
         }
 
         public void PickShortestDistance(List<GenVector> Population)
@@ -201,11 +210,13 @@ namespace Glonass
         {
             PopulationChildrenData = new List<GenVector>();
             List<GenVector> SortedPopulationList = Population.OrderBy(o => o.TotalRoad).ToList();
+            
             for (int i = 0; i < SortedPopulationList.Count - (int)(SortedPopulationList.Count * 0.5); i++)
             {
                 PopulationChildrenData.Add(SortedPopulationList[i]);
 
             }
+            
             for (int i = PopulationChildrenData.Count; i < SortedPopulationList.Count; i++)
             {
                 
