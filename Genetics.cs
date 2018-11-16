@@ -224,9 +224,9 @@ namespace Glonass
             
                 Random r = new Random();
                 int pick = r.Next(0, 100);
-                if(pick > 90)
+                if(pick > 0)
                 {
-                    Randomiize2ArrayOrder(order);
+                  order =  Randomiize2ArrayOrder(order);
                 }
 
             return order;
@@ -256,8 +256,9 @@ namespace Glonass
             }
             return order;
         }
-        public void Randomiize2ArrayOrder(int[] order)
+        public int[] Randomiize2ArrayOrder(int[] order)
         {
+            int[] newOrder = order;
             for (int i = 0; i < (int)order.Length; i++)
             {
                 
@@ -266,11 +267,12 @@ namespace Glonass
                 int s = r.Next(0, order.Length);
                 if (f != s)
                 {
-                    var tmp = order[f];
-                    order[f] = order[s];
-                    order[s] = tmp;
+                    var tmp = newOrder[f];
+                    newOrder[f] = newOrder[s];
+                    newOrder[s] = tmp;
                 }
             }
+            return newOrder;
             
         }
         public int[] RandomiizeArrayOrderT(int[] orderT)
