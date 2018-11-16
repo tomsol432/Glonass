@@ -7,8 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using AForge.Genetic;
-using TSP;
+
 
 namespace Glonass
 {
@@ -26,7 +25,7 @@ namespace Glonass
         Random r = new Random();
         int CitiesCounter;
         double bestScore = double.MaxValue;
-        double originalL;
+        
         Thread[] pool = new Thread[1];
         Vector[] Roads;
         Vector[] sweetRoad;
@@ -39,7 +38,7 @@ namespace Glonass
         SolidColorBrush firstCity = new SolidColorBrush(Color.FromRgb(255, 255, 255));
         SolidColorBrush roadBrush = new SolidColorBrush(Color.FromArgb(255,0, 255, 0));
         SolidColorBrush sweetBrush = new SolidColorBrush(Color.FromArgb(125,255, 45, 255));
-        private bool greedyCrossover;
+        
         #endregion
         
     private void CanvasMap_Loaded(object sender, RoutedEventArgs e)
@@ -278,7 +277,7 @@ namespace Glonass
 
         private void ButtonDrawGen_Click(object sender, RoutedEventArgs e)
         {
-            clicks = 0;
+            
             CanvasMap.Children.Clear();
             Genetics = new Genetics(ref CanvasMap, 100, (int)SliderCitiesCounter.Value);
             Genetics.GenerateDataSet();
@@ -286,14 +285,11 @@ namespace Glonass
             Genetics.DrawGenCities(ref CanvasMap, firstCity);
             Genetics.DrawGenRoads(CanvasMap, roadBrush);
         }
-        int clicks = 0;
+       
         private void ButtonDebug_Click(object sender, RoutedEventArgs e)
         {
             CanvasMap.Children.Clear();
-            
-
-                Genetics.Shake(Genetics.PopulationData1);
-            
+            Genetics.Shake(Genetics.PopulationData1);
             Genetics.DrawGenCities(ref CanvasMap, firstCity);
             Genetics.DrawGenRoads(CanvasMap, roadBrush);
             Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1);
@@ -304,13 +300,26 @@ namespace Glonass
 
         private void ButtonStepp_Click(object sender, RoutedEventArgs e)
         {
+            for (int i = 0; i < 1000; i++)
+            {
+                Genetics.SelectNextPopulationObjects(Genetics.PopulationData1);
+                
+               // Genetics.DrawGenCities(ref CanvasMap, firstCity);
+               // Genetics.DrawGenRoads(CanvasMap, roadBrush);
+                Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1);
+                
+            }
             CanvasMap.Children.Clear();
-            Genetics.SelectNextPopulationObjects(Genetics.PopulationData1);
-            Genetics.mutateOrder();
-            Genetics.DrawGenCities(ref CanvasMap, firstCity);
-            Genetics.DrawGenRoads(CanvasMap, roadBrush);
-            Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1);
             Genetics.DrawBestRoads(CanvasMap, sweetBrush);
+            Console.WriteLine(Genetics.ShortestDistance);
+            tbLog.Clear();
+            for (int i = 0; i < Genetics.BestOrder.Length; i++)
+                {
+
+                    tbLog.AppendText(Genetics.BestOrder[i] + "\r\n");
+                }
+
+            
         }
     }
 }

@@ -22,6 +22,8 @@ namespace Glonass
         Canvas CanvasMap; //IamUsingThisObjectToDrawDataOnMainWindowCanvas
 
         internal List<GenVector> PopulationData1 { get => PopulationData; set => PopulationData = value; }
+        public double ShortestDistance { get => shortestDistance; set => shortestDistance = value; }
+        public int[] BestOrder { get => bestOrder; set => bestOrder = value; }
 
         public Genetics(ref Canvas canvas, int populationSize,int amountofCities)
         {
@@ -29,6 +31,7 @@ namespace Glonass
             this.amountOfCities = amountofCities;
             this.PopulationData1 = new List<GenVector>();
             this.order = new int[amountofCities];
+            this.BestOrder = new int[order.Length];
             GenerateOriginalOrder();
             
         }
@@ -68,17 +71,17 @@ namespace Glonass
         }
         public void DrawBestRoads(Canvas CanvasMap, SolidColorBrush colorBrush)
         {
-            if (bestOrder != null)
+            if (BestOrder != null)
             {
                 for (int i = 0; i < dataSet.Length - 1; i++)
                 {
                     //works almost ok
                     Line line = new Line()
                     {
-                        X1 = dataSet[bestOrder[i]].X,
-                        X2 = dataSet[bestOrder[i + 1]].X,
-                        Y1 = dataSet[bestOrder[i]].Y,
-                        Y2 = dataSet[bestOrder[i + 1]].Y,
+                        X1 = dataSet[BestOrder[i]].X,
+                        X2 = dataSet[BestOrder[i + 1]].X,
+                        Y1 = dataSet[BestOrder[i]].Y,
+                        Y2 = dataSet[BestOrder[i + 1]].Y,
                         Fill = null,
                         Stroke = colorBrush,
                         StrokeThickness = 4,
@@ -89,10 +92,10 @@ namespace Glonass
                     {
                         Line line2 = new Line()
                         {
-                            X1 = dataSet[bestOrder[i + 1]].X,
-                            X2 = dataSet[bestOrder[0]].X,
-                            Y1 = dataSet[bestOrder[i + 1]].Y,
-                            Y2 = dataSet[bestOrder[0]].Y,
+                            X1 = dataSet[BestOrder[i + 1]].X,
+                            X2 = dataSet[BestOrder[0]].X,
+                            Y1 = dataSet[BestOrder[i + 1]].Y,
+                            Y2 = dataSet[BestOrder[0]].Y,
                             Fill = null,
                             Stroke = colorBrush,
                             StrokeThickness = 4,
@@ -163,11 +166,8 @@ namespace Glonass
             foreach (var item in Population)
             {
                 item.CalculateRoadForSingleArray(item.Cities1);
-                
-               // Console.WriteLine(item.TotalRoad);
-               
-                
-                item.RandomiizeArrayOrder(item.Order);
+                mutateOrder(item.Order);
+                //item.RandomiizeArrayOrder(item.Order);
             }
             PickShortestDistance(Population);
             SelectNextPopulationObjects(Population);
@@ -177,12 +177,18 @@ namespace Glonass
         {
             foreach (var item in Population)
             {
-                if(item.TotalRoad < shortestDistance && shortestDistance != 0)
+                if(item.TotalRoad < ShortestDistance && item.TotalRoad != 0)
                 {
-                    shortestDistance = item.TotalRoad;
-                    Console.WriteLine("Shortest distance: " + shortestDistance.ToString());
-                    bestOrder = item.Order;
+                    BestOrder = new int[order.Length];
+                    ShortestDistance = item.TotalRoad;
+                    Console.WriteLine("Shortest distance: " + ShortestDistance.ToString());
+                    for (int i = 0; i < order.Length; i++)
+                    {
+                        BestOrder[i] = order[i];
+
+                    }
                 }
+                Console.WriteLine(item.TotalRoad);
             }
         }
 
@@ -191,32 +197,39 @@ namespace Glonass
         {
             PopulationChildrenData = new List<GenVector>();
             List<GenVector> SortedPopulationList = Population.OrderBy(o => o.TotalRoad).ToList();
-            for (int i = 0; i < SortedPopulationList.Count - (SortedPopulationList.Count*0.05); i++)
+            for (int i = 0; i < SortedPopulationList.Count -(int) (SortedPopulationList.Count*0.5); i++)
             {
                 PopulationChildrenData.Add(SortedPopulationList[i]);
+                
             }
             for (int i = PopulationChildrenData.Count; i < SortedPopulationList.Count; i++)
             {
                 int[] newRandomOrder = RandomiizeArrayOrderT(order);
                 PopulationChildrenData.Add(new GenVector(dataSet.Length, newRandomOrder));
             }
-            this.PopulationData = PopulationChildrenData;
-            PopulationChildrenData = null;
-
-            //Mix'emABit
-        }
-        public void mutateOrder()
-        {
+            PopulationData = PopulationChildrenData;
             foreach (var item in PopulationData)
             {
+                int[] newOrder = mutateOrder(item.Order);
+                for (int i = 0; i < item.Order.Length; i++)
+                {
+                    item.Order[i] = newOrder[i];
+                }
+                //item.Order = mutateOrder(item.Order);
+            }
+            
+        }
+        public int[] mutateOrder(int[]order)
+        {
+            
                 Random r = new Random();
                 int pick = r.Next(0, 100);
                 if(pick > 90)
                 {
-                    Randomiize2ArrayOrder(item.Order);
+                    Randomiize2ArrayOrder(order);
                 }
 
-            }
+            return order;
         }
 
         
@@ -245,14 +258,18 @@ namespace Glonass
         }
         public void Randomiize2ArrayOrder(int[] order)
         {
-            Random r = new Random();
-            int f = r.Next(0, order.Length);
-            int s = r.Next(0, order.Length);
-            if (f != s)
+            for (int i = 0; i < (int)order.Length; i++)
             {
-                var tmp = order[f];
-                order[f] = order[s];
-                order[s] = tmp;
+                
+                Random r = new Random();
+                int f = r.Next(0, order.Length);
+                int s = r.Next(0, order.Length);
+                if (f != s)
+                {
+                    var tmp = order[f];
+                    order[f] = order[s];
+                    order[s] = tmp;
+                }
             }
             
         }

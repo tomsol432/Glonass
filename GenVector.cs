@@ -30,20 +30,20 @@ namespace Glonass
         
         public void CalculateRoadForSingleArray(Vector[] Cities)
         {
-            this.totalRoad = 0;
+            //this.totalRoad = 0;
             for (int i = 0; i < Cities.Length; i++)
             {
                 if (i != Cities.Length - 1)
                 {
                     double a = (double)(Cities[order[i]].X - Cities[order[i+1]].X);
                     double b = (double)(Cities[order[i]].Y - Cities[order[i+1]].Y);
-                    TotalRoad += Math.Sqrt(a * a + b * b);
+                    totalRoad += Math.Sqrt(a * a + b * b);
                 }
                 else if(i == Cities.Length - 1)
                 {
                     double a = (double)(Cities[order[i]].X - Cities[order[0]].X);
                     double b = (double)(Cities[order[i]].Y - Cities[order[0]].Y);
-                    TotalRoad += Math.Sqrt(a * a + b * b);
+                    totalRoad += Math.Sqrt(a * a + b * b);
                 }
             }
             
