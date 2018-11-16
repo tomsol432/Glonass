@@ -50,17 +50,7 @@ namespace Glonass
 
             
         }
-        public void RandomiizeArrayOrder(int[] order)
-        {
-            Random r = new Random();
-            for (int t = 0; t < order.Length; t++)
-            {
-                var tmp = order[t];
-                int place = r.Next(0, order.Length);
-                order[t] = order[place];
-                order[place] = tmp;
-            }
-        }
+        
 
         public int Id { get => id; set => id = value; }
         public Vector[] Cities1 { get => Cities; set => Cities = value; }

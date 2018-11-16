@@ -17,7 +17,7 @@ namespace Glonass
         int[] bestOrder; //ContainsDataOfTheBestGeneratedOrderForWholePopulation
         List<GenVector> PopulationData; //AllPopulationData
         List<GenVector> PopulationChildrenData; //NewPopulationList
-        double shortestDistance = double.MaxValue;
+        double shortestDistance = double.MaxValue; //ItWorksLikeABestScore
         int amountOfCities; //AmountOfCitiesForEachPopulationSet
         Canvas CanvasMap; //IamUsingThisObjectToDrawDataOnMainWindowCanvas
 
@@ -25,15 +25,15 @@ namespace Glonass
         public double ShortestDistance { get => shortestDistance; set => shortestDistance = value; }
         public int[] BestOrder { get => bestOrder; set => bestOrder = value; }
 
-        public Genetics(ref Canvas canvas, int populationSize,int amountofCities)
+        public Genetics(ref Canvas canvas, int amountofCities)
         {
             this.CanvasMap = canvas;
             this.amountOfCities = amountofCities;
-            this.PopulationData1 = new List<GenVector>();
+            this.PopulationData = new List<GenVector>();
             this.order = new int[amountofCities];
             this.BestOrder = new int[order.Length];
             GenerateOriginalOrder();
-            
+
         }
         public void DrawGenRoads(Canvas CanvasMap, SolidColorBrush colorBrush)
         {
@@ -71,47 +71,46 @@ namespace Glonass
         }
         public void DrawBestRoads(Canvas CanvasMap, SolidColorBrush colorBrush)
         {
-            if (BestOrder != null)
+
+            for (int i = 0; i < dataSet.Length - 1; i++)
             {
-                for (int i = 0; i < dataSet.Length - 1; i++)
+                //works almost ok
+                Line line = new Line()
                 {
-                    //works almost ok
-                    Line line = new Line()
+                    X1 = dataSet[BestOrder[i]].X,
+                    X2 = dataSet[BestOrder[i + 1]].X,
+                    Y1 = dataSet[BestOrder[i]].Y,
+                    Y2 = dataSet[BestOrder[i + 1]].Y,
+                    Fill = null,
+                    Stroke = colorBrush,
+                    StrokeThickness = 4,
+                };
+                CanvasMap.Dispatcher.Invoke(new Action(() => { CanvasMap.Children.Add(line); }));
+
+                if (i == dataSet.Length - 2)
+                {
+                    Line line2 = new Line()
                     {
-                        X1 = dataSet[BestOrder[i]].X,
-                        X2 = dataSet[BestOrder[i + 1]].X,
-                        Y1 = dataSet[BestOrder[i]].Y,
-                        Y2 = dataSet[BestOrder[i + 1]].Y,
+                        X1 = dataSet[BestOrder[i + 1]].X,
+                        X2 = dataSet[BestOrder[0]].X,
+                        Y1 = dataSet[BestOrder[i + 1]].Y,
+                        Y2 = dataSet[BestOrder[0]].Y,
                         Fill = null,
                         Stroke = colorBrush,
                         StrokeThickness = 4,
                     };
-                    CanvasMap.Dispatcher.Invoke(new Action(() => { CanvasMap.Children.Add(line); }));
+                    CanvasMap.Dispatcher.Invoke(new Action(() => { CanvasMap.Children.Add(line2); }));
 
-                    if (i == dataSet.Length - 2)
-                    {
-                        Line line2 = new Line()
-                        {
-                            X1 = dataSet[BestOrder[i + 1]].X,
-                            X2 = dataSet[BestOrder[0]].X,
-                            Y1 = dataSet[BestOrder[i + 1]].Y,
-                            Y2 = dataSet[BestOrder[0]].Y,
-                            Fill = null,
-                            Stroke = colorBrush,
-                            StrokeThickness = 4,
-                        };
-                        CanvasMap.Dispatcher.Invoke(new Action(() => { CanvasMap.Children.Add(line2); }));
-
-                    }
                 }
             }
+
         }
 
         public void DrawGenCities(ref Canvas CanvasMap, SolidColorBrush firstCity)
         {
             for (int i = 0; i < dataSet.Length; i++)
             {
-                
+
                 Ellipse e = new Ellipse();
                 e.Width = 10;
                 e.Height = 10;
@@ -127,7 +126,7 @@ namespace Glonass
 
             for (int i = 0; i < dataSet.Length; i++)
             {
-                PopulationData1.Add(new GenVector(i,dataSet,order));
+                PopulationData1.Add(new GenVector(i, dataSet, order));
             }
 
         }
@@ -138,7 +137,7 @@ namespace Glonass
             for (int i = 0; i < dataSet.Length; i++)
             {
                 dataSet[i] = new Vector(r.Next(50, (int)CanvasMap.ActualWidth), r.Next(50, (int)CanvasMap.ActualHeight));
-                
+
             }
         }
         public void GenerateOriginalOrder()
@@ -149,25 +148,23 @@ namespace Glonass
 
             }
         }
-        
+
         public void Shake(List<GenVector> Population)
         {
             foreach (var item in Population)
             {
                 RandomiizeArrayOrder(item.Order);
-                
+
             }
-           
-            
+
+
         }
         public void CalculateRoadForEachElementInPopulation(List<GenVector> Population)
         {
-            
             foreach (var item in Population)
             {
                 item.CalculateRoadForSingleArray(item.Cities1);
-                mutateOrder(item.Order);
-                //item.RandomiizeArrayOrder(item.Order);
+                MutateOrder(item.Order);
             }
             PickShortestDistance(Population);
             SelectNextPopulationObjects(Population);
@@ -177,7 +174,7 @@ namespace Glonass
         {
             foreach (var item in Population)
             {
-                if(item.TotalRoad < ShortestDistance && item.TotalRoad != 0)
+                if (item.TotalRoad < ShortestDistance && item.TotalRoad != 0)
                 {
                     BestOrder = new int[order.Length];
                     ShortestDistance = item.TotalRoad;
@@ -188,7 +185,6 @@ namespace Glonass
 
                     }
                 }
-                Console.WriteLine(item.TotalRoad);
             }
         }
 
@@ -197,10 +193,10 @@ namespace Glonass
         {
             PopulationChildrenData = new List<GenVector>();
             List<GenVector> SortedPopulationList = Population.OrderBy(o => o.TotalRoad).ToList();
-            for (int i = 0; i < SortedPopulationList.Count -(int) (SortedPopulationList.Count*0.5); i++)
+            for (int i = 0; i < SortedPopulationList.Count - (int)(SortedPopulationList.Count * 0.5); i++)
             {
                 PopulationChildrenData.Add(SortedPopulationList[i]);
-                
+
             }
             for (int i = PopulationChildrenData.Count; i < SortedPopulationList.Count; i++)
             {
@@ -210,29 +206,27 @@ namespace Glonass
             PopulationData = PopulationChildrenData;
             foreach (var item in PopulationData)
             {
-                int[] newOrder = mutateOrder(item.Order);
-                for (int i = 0; i < item.Order.Length; i++)
-                {
-                    item.Order[i] = newOrder[i];
-                }
-                //item.Order = mutateOrder(item.Order);
+                item.Order = MutateOrder(item.Order);
             }
-            
+
         }
-        public int[] mutateOrder(int[]order)
+        public int[] MutateOrder(int[] order)
         {
-            
-                Random r = new Random();
-                int pick = r.Next(0, 100);
-                if(pick > 0)
-                {
-                  order =  Randomiize2ArrayOrder(order);
-                }
-
-            return order;
+            int[] temp;
+            Random r = new Random();
+            int pick = r.Next(0, 100);
+            if (pick > 0)
+            {
+                temp = Randomiize2ArrayOrder(order);
+                return temp;
+            }
+            else
+            {
+                return order;
+            }
         }
 
-        
+
         public void RandomiizeListOrder(List<GenVector> genVectors)
         {
             Random r = new Random();
@@ -244,7 +238,7 @@ namespace Glonass
                 genVectors[place] = tmp;
             }
         }
-        public int [] RandomiizeArrayOrder(int[] order)
+        public int[] RandomiizeArrayOrder(int[] order)
         {
             Random r = new Random();
             for (int t = 0; t < order.Length; t++)
@@ -259,21 +253,16 @@ namespace Glonass
         public int[] Randomiize2ArrayOrder(int[] order)
         {
             int[] newOrder = order;
-            for (int i = 0; i < (int)order.Length; i++)
+            Random r = new Random();
+            for (int t = 0; t <Math.Ceiling(order.Length - (order.Length * 0.9)); t++)
             {
-                
-                Random r = new Random();
-                int f = r.Next(0, order.Length);
-                int s = r.Next(0, order.Length);
-                if (f != s)
-                {
-                    var tmp = newOrder[f];
-                    newOrder[f] = newOrder[s];
-                    newOrder[s] = tmp;
-                }
+                var tmp = order[t];
+                int place = r.Next(0, order.Length);
+                order[t] = order[place];
+                order[place] = tmp;
             }
-            return newOrder;
-            
+            return order;
+
         }
         public int[] RandomiizeArrayOrderT(int[] orderT)
         {

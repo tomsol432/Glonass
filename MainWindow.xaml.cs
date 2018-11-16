@@ -279,7 +279,7 @@ namespace Glonass
         {
             
             CanvasMap.Children.Clear();
-            Genetics = new Genetics(ref CanvasMap, 100, (int)SliderCitiesCounter.Value);
+            Genetics = new Genetics(ref CanvasMap, (int)SliderCitiesCounter.Value);
             Genetics.GenerateDataSet();
             Genetics.PushCitiesDataToAllObjects();
             Genetics.DrawGenCities(ref CanvasMap, firstCity);
@@ -302,10 +302,7 @@ namespace Glonass
         {
             for (int i = 0; i < 1000; i++)
             {
-                Genetics.SelectNextPopulationObjects(Genetics.PopulationData1);
                 
-               // Genetics.DrawGenCities(ref CanvasMap, firstCity);
-               // Genetics.DrawGenRoads(CanvasMap, roadBrush);
                 Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1);
                 
             }

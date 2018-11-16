@@ -14,9 +14,9 @@
         <Button x:Name="ButtonSlove" Content="Solve" Margin="0,62,10,0" VerticalAlignment="Top" Click="ButtonSlove_Click" HorizontalAlignment="Right" Width="315"/>
         <Button x:Name="ButtonStopSolving" Content="Stop" HorizontalAlignment="Right" Margin="0,87,10,0" VerticalAlignment="Top" Width="315" Click="ButtonStopSolving_Click"/>
         <Button x:Name="ButtonShowBest" Content="Show best" Margin="0,112,10,0" VerticalAlignment="Top" Height="22" Click="ButtonShowBest_Click" HorizontalAlignment="Right" Width="315"/>
-        <Button x:Name="ButtonDrawGen" Content="DrawGenCities" HorizontalAlignment="Left" Margin="1270,192,0,0" VerticalAlignment="Top" Width="315" Click="ButtonDrawGen_Click"/>
-        <Button x:Name="ButtonDebug" Content="Debug" HorizontalAlignment="Left" Margin="1270,167,0,0" VerticalAlignment="Top" Width="315" Click="ButtonDebug_Click"/>
-        <Button x:Name="ButtonStepp" Content="Stepp" HorizontalAlignment="Left" Margin="1270,217,0,0" VerticalAlignment="Top" Width="315" Click="ButtonStepp_Click"/>
+        <Button x:Name="ButtonDrawGen" Content="Generate Genetics object" HorizontalAlignment="Left" Margin="1270,192,0,0" VerticalAlignment="Top" Width="315" Click="ButtonDrawGen_Click"/>
+        <Button x:Name="ButtonDebug" Content="Genetic-Bruteforce(shake dataset)" HorizontalAlignment="Left" Margin="1270,167,0,0" VerticalAlignment="Top" Width="315" Click="ButtonDebug_Click"/>
+        <Button x:Name="ButtonStepp" Content="Solve(leap forward X-steps)" HorizontalAlignment="Left" Margin="1270,217,0,0" VerticalAlignment="Top" Width="315" Click="ButtonStepp_Click"/>
 
     </Grid>
 </Window>
