@@ -14,12 +14,14 @@ namespace Glonass
         Vector[] Cities;
         int[] order;
         double totalRoad = 0;
+        Random random = new Random();
 
         public GenVector(int dataSetSize, int [] order)
         {
             this.Cities = new Vector[dataSetSize];
             this.order = order;
             RandomiizeArrayOrder(this.order);
+            
         }
 
         public GenVector(int id, Vector[] dataSet, int[] order)
@@ -28,6 +30,7 @@ namespace Glonass
             this.Cities = dataSet;
             this.order = order;
             RandomiizeArrayOrder(this.order);
+            
         }
         
         public void CalculateRoadForSingleArray(TextBox tb)
@@ -35,28 +38,33 @@ namespace Glonass
             this.totalRoad = 0;
             for (int i = 0; i < Cities.Length; i++)
             {
+                
                 if (i != Cities.Length - 1)
                 {
-                    double a = Cities[order[i]].X - Cities[order[i + 1]].X;
-                    double b = Cities[order[i]].Y - Cities[order[i + 1]].Y;
+                    int firstOrd = order[i];
+                    int secondOrd = order[i + 1];
+                    double a = Cities[firstOrd].X - Cities[secondOrd].X;
+                    double b = Cities[firstOrd].Y - Cities[secondOrd].Y;
                     totalRoad += Math.Sqrt((a * a) + (b * b));
                 }
                 else if(i == Cities.Length - 1)
                 {
-                    double a = Cities[order[i]].X - Cities[order[0]].X;
-                    double b = Cities[order[i]].Y - Cities[order[0]].Y;
+                    int firstOrd = order[i];
+                    int secondOrd = order[0];
+                    double a = Cities[firstOrd].X - Cities[0].X;
+                    double b = Cities[firstOrd].Y - Cities[0].Y;
                     totalRoad += Math.Sqrt((a * a) + (b * b));
                 }
             }
-            tb.AppendText(totalRoad + " \r\n");
-                
+            //tb.AppendText(totalRoad + " \r\n");
+            
+
         }
         public int[] MutateOrder()
         {
             int[] temp;
-            Random r = new Random();
-            int pick = r.Next(0, 100);
-            if (pick > 0)
+            int pick = random.Next(0, 100);
+            if (pick > 20)
             {
                 temp = Randomiize2ArrayOrder();
                 return temp;
@@ -68,12 +76,11 @@ namespace Glonass
         }
         public int[] Randomiize2ArrayOrder()
         {
-            int[] newOrder = order;
-            Random r = new Random();
-            for (int t = 0; t < Math.Ceiling(order.Length - (order.Length * 0.8)); t++)
+           
+            for (int t = 0; t < Math.Ceiling(order.Length - (order.Length * 0.6)); t++)
             {
                 var tmp = order[t];
-                int place = r.Next(0, order.Length);
+                int place = random.Next(0, order.Length);
                 order[t] = order[place];
                 order[place] = tmp;
             }
@@ -84,9 +91,9 @@ namespace Glonass
         {
             for (int t = 0; t < order.Length; t++)
             {
-                Random r = new Random();
+                
                 var tmp = order[t];
-                int place = r.Next(0, order.Length);
+                int place = random.Next(0, order.Length);
                 order[t] = order[place];
                 order[place] = tmp;
             }

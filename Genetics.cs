@@ -20,6 +20,7 @@ namespace Glonass
         double shortestDistance = double.MaxValue; //ItWorksLikeABestScore
         int amountOfCities; //AmountOfCitiesForEachPopulationSet
         Canvas CanvasMap; //IamUsingThisObjectToDrawDataOnMainWindowCanvas
+        Random r = new Random();
 
         internal List<GenVector> PopulationData1 { get => PopulationData; set => PopulationData = value; }
         public double ShortestDistance { get => shortestDistance; set => shortestDistance = value; }
@@ -132,7 +133,6 @@ namespace Glonass
         }
         public void GenerateDataSet()
         {
-            Random r = new Random();
             dataSet = new Vector[amountOfCities];
             for (int i = 0; i < dataSet.Length; i++)
             {
@@ -177,7 +177,6 @@ namespace Glonass
                 {
                     BestOrder = new int[order.Length];
                     ShortestDistance = item.TotalRoad;
-                    Console.WriteLine("Shortest distance: " + ShortestDistance.ToString());
                     for (int i = 0; i < order.Length; i++)
                     {
                         BestOrder[i] = order[i];
@@ -200,18 +199,12 @@ namespace Glonass
             for (int i = PopulationChildrenData.Count; i < SortedPopulationList.Count; i++)
             {
                 
-                PopulationChildrenData.Add(new GenVector(dataSet.Length, order));
+                PopulationChildrenData.Add(new GenVector(i,dataSet, order));
             }
-            PopulationData = null;
             PopulationData = PopulationChildrenData;
             foreach (var item in PopulationData)
             {
-                int[] tmpOrder = item.MutateOrder();
-                for (int i = 0; i < item.Order.Length; i++)
-                {
-                    item.Order[i] = tmpOrder[i];
-                    Console.Write("item.order : "+item.Order[i] + " ,tempo: " +tmpOrder[i] + " ");
-                }
+                item.MutateOrder();
             }
 
         }
@@ -220,7 +213,6 @@ namespace Glonass
 
         public void RandomiizeListOrder(List<GenVector> genVectors)
         {
-            Random r = new Random();
             for (int t = 0; t < genVectors.Capacity; t++)
             {
                 var tmp = genVectors[t];
@@ -231,7 +223,6 @@ namespace Glonass
         }
         public int[] RandomiizeArrayOrder(int[] order)
         {
-            Random r = new Random();
             for (int t = 0; t < order.Length; t++)
             {
                 var tmp = order[t];
@@ -244,7 +235,6 @@ namespace Glonass
        
         public int[] RandomiizeArrayOrderT(int[] orderT)
         {
-            Random r = new Random();
             for (int t = 0; t < orderT.Length; t++)
             {
                 var tmp = orderT[t];

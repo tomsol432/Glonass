@@ -296,21 +296,17 @@ namespace Glonass
 
         private void ButtonStepp_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < 10; i++)
+            tbLog.Clear();
+            for (int i = 0; i < 10000; i++)
             {
                 
                 Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1,tbLog);
-                
+                //tbLog.AppendText(Genetics.PopulationData1[i].TotalRoad + "\r\n");
             }
             CanvasMap.Children.Clear();
             Genetics.DrawBestRoads(CanvasMap, sweetBrush);
-            Console.WriteLine(Genetics.ShortestDistance);
-            tbLog.Clear();
-            for (int i = 0; i < Genetics.BestOrder.Length; i++)
-                {
-
-                    tbLog.AppendText(Genetics.ShortestDistance + "\r\n");
-                }
+            tbLog.Text += Genetics.ShortestDistance + "\r\n";
+            
 
             
         }
