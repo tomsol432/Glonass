@@ -288,8 +288,8 @@ namespace Glonass
             Genetics.Shake(Genetics.PopulationData1);
             Genetics.DrawGenCities(ref CanvasMap, firstCity);
             Genetics.DrawGenRoads(CanvasMap, roadBrush);
-            Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1,tbLog);
-            Genetics.DrawBestRoads(CanvasMap, sweetBrush);
+            Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1,tbLog,CanvasMap,sweetBrush);
+           
             
            
         }
@@ -297,17 +297,13 @@ namespace Glonass
         private void ButtonStepp_Click(object sender, RoutedEventArgs e)
         {
             tbLog.Clear();
-            for (int i = 0; i < 10000; i++)
-            {
-                
-                Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1,tbLog);
-                //tbLog.AppendText(Genetics.PopulationData1[i].TotalRoad + "\r\n");
-            }
-            CanvasMap.Children.Clear();
-            Genetics.DrawBestRoads(CanvasMap, sweetBrush);
-            tbLog.Text += Genetics.ShortestDistance + "\r\n";
             
+            Thread thread = new Thread(() => {
 
+                Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1, tbLog,CanvasMap,sweetBrush);
+            });
+            thread.Start();
+            
             
         }
     }

@@ -70,39 +70,47 @@ namespace Glonass
                 }
             }
         }
-        public void DrawBestRoads(Canvas CanvasMap, SolidColorBrush colorBrush)
+        public void DrawBestRoads(Canvas CanvasMap, SolidColorBrush colorBrush, TextBox log)
         {
 
             for (int i = 0; i < dataSet.Length - 1; i++)
             {
                 //works almost ok
-                Line line = new Line()
+                CanvasMap.Dispatcher.Invoke(new Action(() => 
                 {
-                    X1 = dataSet[BestOrder[i]].X,
-                    X2 = dataSet[BestOrder[i + 1]].X,
-                    Y1 = dataSet[BestOrder[i]].Y,
-                    Y2 = dataSet[BestOrder[i + 1]].Y,
-                    Fill = null,
-                    Stroke = colorBrush,
-                    StrokeThickness = 4,
-                };
-                CanvasMap.Dispatcher.Invoke(new Action(() => { CanvasMap.Children.Add(line); }));
-
-                if (i == dataSet.Length - 2)
-                {
-                    Line line2 = new Line()
+                    Line line = new Line()
                     {
-                        X1 = dataSet[BestOrder[i + 1]].X,
-                        X2 = dataSet[BestOrder[0]].X,
-                        Y1 = dataSet[BestOrder[i + 1]].Y,
-                        Y2 = dataSet[BestOrder[0]].Y,
+                        X1 = dataSet[BestOrder[i]].X,
+                        X2 = dataSet[BestOrder[i + 1]].X,
+                        Y1 = dataSet[BestOrder[i]].Y,
+                        Y2 = dataSet[BestOrder[i + 1]].Y,
                         Fill = null,
                         Stroke = colorBrush,
                         StrokeThickness = 4,
                     };
-                    CanvasMap.Dispatcher.Invoke(new Action(() => { CanvasMap.Children.Add(line2); }));
+                    CanvasMap.Dispatcher.Invoke(new Action(() => { CanvasMap.Children.Add(line); }));
 
-                }
+                    if (i == dataSet.Length - 2)
+                    {
+                        Line line2 = new Line()
+                        {
+                            X1 = dataSet[BestOrder[i + 1]].X,
+                            X2 = dataSet[BestOrder[0]].X,
+                            Y1 = dataSet[BestOrder[i + 1]].Y,
+                            Y2 = dataSet[BestOrder[0]].Y,
+                            Fill = null,
+                            Stroke = colorBrush,
+                            StrokeThickness = 4,
+                        };
+                        CanvasMap.Dispatcher.Invoke(new Action(() => { CanvasMap.Children.Add(line2); }));
+
+                    }
+                    log.Dispatcher.Invoke(new Action(() =>
+                    {
+                        log.Text += shortestDistance + "\r\n";
+                    }));
+                }));
+               
             }
 
         }
@@ -159,7 +167,8 @@ namespace Glonass
 
 
         }
-        public void CalculateRoadForEachElementInPopulation(List<GenVector> Population, TextBox tb)
+        
+        public void CalculateRoadForEachElementInPopulation(List<GenVector> Population, TextBox tb, Canvas canvas, SolidColorBrush solidColorBrush)
         {
             foreach (var item in Population)
             {
@@ -167,6 +176,7 @@ namespace Glonass
             }
             PickShortestDistance(Population);
             SelectNextPopulationObjects(Population);
+            DrawBestRoads(canvas, solidColorBrush, tb);
         }
 
         public void PickShortestDistance(List<GenVector> Population)

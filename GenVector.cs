@@ -77,7 +77,7 @@ namespace Glonass
         public int[] Randomiize2ArrayOrder()
         {
            
-            for (int t = 0; t < Math.Ceiling(order.Length - (order.Length * 0.6)); t++)
+            for (int t = 0; t < Math.Ceiling(order.Length - (order.Length * 0.1)); t++)
             {
                 var tmp = order[t];
                 int place = random.Next(0, order.Length);
