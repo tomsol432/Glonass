@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,6 +30,9 @@ namespace Glonass
         Thread[] pool = new Thread[1];
         Vector[] Roads;
         Vector[] sweetRoad;
+        List<Vector[]> AllCombinations = new List<Vector[]>();
+
+        Genetics Genetics;
         #endregion
         #region BrushDef
         SolidColorBrush cityBrush = new SolidColorBrush(Color.FromRgb( 0, 55, 255));
@@ -191,7 +196,7 @@ namespace Glonass
             {
 
                 CalcRoad(array);
-                if (ctr % 100000 == 0)
+                if (ctr % 1000000 == 0)
                 {
                     Application.Current.Dispatcher.Invoke(new Action(() => {
                         SolidColorBrush scb = new SolidColorBrush(Color.FromArgb(150,(byte)r.Next(1,255), (byte)r.Next(1, 255), (byte)r.Next(1, 255)));
@@ -230,6 +235,19 @@ namespace Glonass
             }
         }
 
+        public void GetAllCombinations(Vector[] tmpList)
+        {
+            
+
+            
+
+        }
+
+        private Vector[] GetPermutations<T>()
+        {
+            throw new NotImplementedException();
+        }
+
         private void ButtonStopSolving_Click(object sender, RoutedEventArgs e)
         {
             for (int i = 0; i < pool.Length; i++)
@@ -249,6 +267,50 @@ namespace Glonass
         private void tbLog_TextChanged(object sender, TextChangedEventArgs e)
         {
             
+        }
+        static IEnumerable<IEnumerable<T>> GetPermutations<T>(IEnumerable<T> list, int length)
+        {
+            if (length == 1) return list.Select(t => new T[] { t });
+            return GetPermutations(list, length - 1)
+                .SelectMany(t => list.Where(o => !t.Contains(o)),
+                    (t1, t2) => t1.Concat(new T[] { t2 }));
+        }
+
+        private void ButtonDrawGen_Click(object sender, RoutedEventArgs e)
+        {
+            clicks = 0;
+            CanvasMap.Children.Clear();
+            Genetics = new Genetics(ref CanvasMap, 100, (int)SliderCitiesCounter.Value);
+            Genetics.GenerateDataSet();
+            Genetics.PushCitiesDataToAllObjects();
+            Genetics.DrawGenCities(ref CanvasMap, firstCity);
+            Genetics.DrawGenRoads(CanvasMap, roadBrush);
+        }
+        int clicks = 0;
+        private void ButtonDebug_Click(object sender, RoutedEventArgs e)
+        {
+            CanvasMap.Children.Clear();
+            
+
+                Genetics.Shake(Genetics.PopulationData1);
+            
+            Genetics.DrawGenCities(ref CanvasMap, firstCity);
+            Genetics.DrawGenRoads(CanvasMap, roadBrush);
+            Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1);
+            Genetics.DrawBestRoads(CanvasMap, sweetBrush);
+            
+           
+        }
+
+        private void ButtonStepp_Click(object sender, RoutedEventArgs e)
+        {
+            CanvasMap.Children.Clear();
+            Genetics.SelectNextPopulationObjects(Genetics.PopulationData1);
+            Genetics.mutateOrder();
+            Genetics.DrawGenCities(ref CanvasMap, firstCity);
+            Genetics.DrawGenRoads(CanvasMap, roadBrush);
+            Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1);
+            Genetics.DrawBestRoads(CanvasMap, sweetBrush);
         }
     }
 }

@@ -55,6 +55,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Genetics.cs" />
+    <Compile Include="GenVector.cs" />
     <Compile Include="TSPChromosome.cs" />
     <Compile Include="TSPFitness.cs" />
     <Page Include="MainWindow.xaml">
