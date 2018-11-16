@@ -267,13 +267,7 @@ namespace Glonass
         {
             
         }
-        static IEnumerable<IEnumerable<T>> GetPermutations<T>(IEnumerable<T> list, int length)
-        {
-            if (length == 1) return list.Select(t => new T[] { t });
-            return GetPermutations(list, length - 1)
-                .SelectMany(t => list.Where(o => !t.Contains(o)),
-                    (t1, t2) => t1.Concat(new T[] { t2 }));
-        }
+        
 
         private void ButtonDrawGen_Click(object sender, RoutedEventArgs e)
         {
@@ -282,8 +276,10 @@ namespace Glonass
             Genetics = new Genetics(ref CanvasMap, (int)SliderCitiesCounter.Value);
             Genetics.GenerateDataSet();
             Genetics.PushCitiesDataToAllObjects();
+            Genetics.Shake(Genetics.PopulationData1);
             Genetics.DrawGenCities(ref CanvasMap, firstCity);
             Genetics.DrawGenRoads(CanvasMap, roadBrush);
+            
         }
        
         private void ButtonDebug_Click(object sender, RoutedEventArgs e)
@@ -292,7 +288,7 @@ namespace Glonass
             Genetics.Shake(Genetics.PopulationData1);
             Genetics.DrawGenCities(ref CanvasMap, firstCity);
             Genetics.DrawGenRoads(CanvasMap, roadBrush);
-            Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1);
+            Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1,tbLog);
             Genetics.DrawBestRoads(CanvasMap, sweetBrush);
             
            
@@ -300,10 +296,10 @@ namespace Glonass
 
         private void ButtonStepp_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10; i++)
             {
                 
-                Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1);
+                Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1,tbLog);
                 
             }
             CanvasMap.Children.Clear();
@@ -313,7 +309,7 @@ namespace Glonass
             for (int i = 0; i < Genetics.BestOrder.Length; i++)
                 {
 
-                    tbLog.AppendText(Genetics.BestOrder[i] + "\r\n");
+                    tbLog.AppendText(Genetics.ShortestDistance + "\r\n");
                 }
 
             

@@ -159,12 +159,11 @@ namespace Glonass
 
 
         }
-        public void CalculateRoadForEachElementInPopulation(List<GenVector> Population)
+        public void CalculateRoadForEachElementInPopulation(List<GenVector> Population, TextBox tb)
         {
             foreach (var item in Population)
             {
-                item.CalculateRoadForSingleArray(item.Cities1);
-                MutateOrder(item.Order);
+                item.CalculateRoadForSingleArray(tb);
             }
             PickShortestDistance(Population);
             SelectNextPopulationObjects(Population);
@@ -200,31 +199,23 @@ namespace Glonass
             }
             for (int i = PopulationChildrenData.Count; i < SortedPopulationList.Count; i++)
             {
-                int[] newRandomOrder = RandomiizeArrayOrderT(order);
-                PopulationChildrenData.Add(new GenVector(dataSet.Length, newRandomOrder));
+                
+                PopulationChildrenData.Add(new GenVector(dataSet.Length, order));
             }
+            PopulationData = null;
             PopulationData = PopulationChildrenData;
             foreach (var item in PopulationData)
             {
-                item.Order = MutateOrder(item.Order);
+                int[] tmpOrder = item.MutateOrder();
+                for (int i = 0; i < item.Order.Length; i++)
+                {
+                    item.Order[i] = tmpOrder[i];
+                    Console.Write("item.order : "+item.Order[i] + " ,tempo: " +tmpOrder[i] + " ");
+                }
             }
 
         }
-        public int[] MutateOrder(int[] order)
-        {
-            int[] temp;
-            Random r = new Random();
-            int pick = r.Next(0, 100);
-            if (pick > 0)
-            {
-                temp = Randomiize2ArrayOrder(order);
-                return temp;
-            }
-            else
-            {
-                return order;
-            }
-        }
+        
 
 
         public void RandomiizeListOrder(List<GenVector> genVectors)
@@ -250,20 +241,7 @@ namespace Glonass
             }
             return order;
         }
-        public int[] Randomiize2ArrayOrder(int[] order)
-        {
-            int[] newOrder = order;
-            Random r = new Random();
-            for (int t = 0; t <Math.Ceiling(order.Length - (order.Length * 0.9)); t++)
-            {
-                var tmp = order[t];
-                int place = r.Next(0, order.Length);
-                order[t] = order[place];
-                order[place] = tmp;
-            }
-            return order;
-
-        }
+       
         public int[] RandomiizeArrayOrderT(int[] orderT)
         {
             Random r = new Random();
