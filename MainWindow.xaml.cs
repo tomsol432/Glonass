@@ -352,7 +352,7 @@ namespace Glonass
             Aforge.AforgeFitness aforgeFitness = new Aforge.AforgeFitness(order,dataset);
             Aforge.AforgeSelectionMethod aforgeSelectionMethod = new Aforge.AforgeSelectionMethod();
             Aforge.MyAforgePopulation AforgePopulation = new Aforge.MyAforgePopulation(dataset.Length * 10, aforgeChromosome, aforgeFitness, new RouletteWheelSelection());
-            AforgePopulation.MutationRate = 0.2;
+            AforgePopulation.MutationRate = 0.5;
             AforgePopulation.RandomSelectionPortion = 0.2;
             
             tbLog.Text = "Population size: " +AforgePopulation.Size.ToString() + "\r\n";
