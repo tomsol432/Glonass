@@ -266,6 +266,7 @@ namespace Glonass
         private void tbLog_TextChanged(object sender, TextChangedEventArgs e)
         {
             
+            tbLog.ScrollToEnd();
         }
         
 
@@ -284,28 +285,21 @@ namespace Glonass
         
             
         }
-       
-        private void ButtonDebug_Click(object sender, RoutedEventArgs e)
-        {
-            CanvasMap.Children.Clear();
-            //Genetics.Shake(Genetics.PopulationData1);
-            //Genetics.DrawGenCities(ref CanvasMap, firstCity);
-            //Genetics.DrawGenRoads(CanvasMap, roadBrush);
-            //Genetics.CalculateRoadForEachElementInPopulation(Genetics.PopulationData1,tbLog,CanvasMap,sweetBrush,100000);
-           
-            
-           
-        }
-
+      
         private void ButtonStepp_Click(object sender, RoutedEventArgs e)
         {
             tbLog.Clear();
             
             threadGen = new Thread(() => {
                 
-                    for (int j = 0; j < 100000000; j++)
+                    for (int j = 0; j < 100000; j++)
                     {
                         genetics.CalculateRoadForEachElementInPopulation(genetics.PopulationData1, tbLog, CanvasMap, sweetBrush, j);
+                        labelPopCount.Dispatcher.Invoke(new Action(() => 
+                    {
+                        labelPopCount.Content = "Generation: " + j; 
+
+                    }));
                     }
                     
                 

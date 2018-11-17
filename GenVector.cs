@@ -33,7 +33,7 @@ namespace Glonass
             
         }
         
-        public void CalculateRoadForSingleArray(TextBox tb)
+        public void CalculateRoadForSingleArray()
         {
             this.totalRoad = 0;
             for (int i = 0; i < Cities.Length; i++)
@@ -63,7 +63,7 @@ namespace Glonass
         {
             int[] temp;
             int pick = random.Next(0, 100);
-            if (pick > 0)
+            if (pick > 90)
             {
                 temp = Randomiize2ArrayOrder();
                 return temp;
@@ -77,7 +77,7 @@ namespace Glonass
         {
             int randomPlace1 = random.Next(0, order.Length);
             int randomPlace2 = random.Next(0, order.Length);
-            for (int t = 0; t < Math.Ceiling(order.Length - (order.Length * 0.2)); t++)
+            for (int t = 0; t < Math.Ceiling(order.Length - (order.Length * 0.9)); t++)
             {
                 var tmp = order[randomPlace1];
                 order[randomPlace1] = order[randomPlace2];

@@ -112,13 +112,14 @@ namespace Glonass
                     }
                     
                 }));
-                log.Dispatcher.Invoke(new Action(() =>
-                {
-                    log.Clear();
-                    log.Text += shortestDistance + "\r\n";
-                }));
+               
 
             }
+            log.Dispatcher.Invoke(new Action(() =>
+            {
+
+                log.Text += shortestDistance + "\r\n";
+            }));
 
         }
 
@@ -142,7 +143,11 @@ namespace Glonass
 
             for (int i = 0; i < dataSet.Length; i++)
             {
-                PopulationData1.Add(new GenVector(i, dataSet, order));
+                for (int j = 0; j < 20; j++)
+                {
+                    PopulationData1.Add(new GenVector(i, dataSet, order));
+                }
+                
             }
 
         }
@@ -179,11 +184,11 @@ namespace Glonass
         {
             foreach (var item in Population)
             {
-                item.CalculateRoadForSingleArray(tb);
+                item.CalculateRoadForSingleArray();
             }
             PickShortestDistance(Population);
             SelectNextPopulationObjects(Population);
-            if (counter % 100000 == 0)
+            if (counter % 1000 == 0)
             {
                 DrawBestRoads(canvas, solidColorBrush, tb);
             }
@@ -212,24 +217,26 @@ namespace Glonass
             PopulationChildrenData = new List<GenVector>();
             List<GenVector> SortedPopulationList = Population.OrderBy(o => o.TotalRoad).ToList();
             
-            for (int i = 0; i < SortedPopulationList.Count - (int)(SortedPopulationList.Count * 0.6); i++)
+            for (int i = 0; i < SortedPopulationList.Count - (int)(SortedPopulationList.Count * 0.5); i++)
             {
                 PopulationChildrenData.Add(SortedPopulationList[i]);
                // SortedPopulationList.Remove(SortedPopulationList[i]);
 
             }
-            
+            foreach (var item in PopulationData)
+            {
+                item.MutateOrder();
+            }
+
             for (int i = PopulationChildrenData.Count; i < SortedPopulationList.Count; i++)
             {
                 
                 PopulationChildrenData.Add(new GenVector(i,dataSet, order));
             }
             PopulationData = PopulationChildrenData;
-            
-                foreach (var item in PopulationData)
-                {
-                    item.MutateOrder();
-                }
+            SortedPopulationList = null;
+            PopulationChildrenData = null;
+                
             
             
 

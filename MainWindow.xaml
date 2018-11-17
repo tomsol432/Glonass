@@ -10,14 +10,14 @@
         <Canvas x:Name="CanvasMap" Margin="10,10,330,3" Loaded="CanvasMap_Loaded"/>
         <Button x:Name="ButtonGenerate" Content="Generate" Margin="0,10,10,0" VerticalAlignment="Top" Click="ButtonGenerate_Click" HorizontalAlignment="Right" Width="315"/>
         <Slider x:Name="SliderCitiesCounter" Margin="0,35,10,0" VerticalAlignment="Top" RenderTransformOrigin="1.477,1.101" Height="22" Value="2" Minimum="4" Maximum="50" ValueChanged="SliderCitiesCounter_ValueChanged" SmallChange="1" IsSnapToTickEnabled="True" HorizontalAlignment="Right" Width="315"/>
-        <TextBox x:Name="tbLog" HorizontalAlignment="Right" Margin="0,0,10,10" TextWrapping="Wrap" Width="299" Height="492" VerticalAlignment="Bottom" TextChanged="tbLog_TextChanged" Background="{x:Null}" Foreground="White" BorderBrush="{x:Null}"/>
+        <TextBox x:Name="tbLog" HorizontalAlignment="Right" Margin="0,0,10,10" TextWrapping="Wrap" Width="315" Height="492" VerticalAlignment="Bottom" TextChanged="tbLog_TextChanged" Background="{x:Null}" Foreground="White" BorderBrush="{x:Null}" TextOptions.TextHintingMode="Animated"/>
         <Button x:Name="ButtonSlove" Content="Solve" Margin="0,62,10,0" VerticalAlignment="Top" Click="ButtonSlove_Click" HorizontalAlignment="Right" Width="315"/>
         <Button x:Name="ButtonStopSolving" Content="Stop" HorizontalAlignment="Right" Margin="0,87,10,0" VerticalAlignment="Top" Width="315" Click="ButtonStopSolving_Click"/>
         <Button x:Name="ButtonShowBest" Content="Show best" Margin="0,112,10,0" VerticalAlignment="Top" Height="22" Click="ButtonShowBest_Click" HorizontalAlignment="Right" Width="315"/>
-        <Button x:Name="ButtonDrawGen" Content="Generate Genetics object" HorizontalAlignment="Left" Margin="1270,192,0,0" VerticalAlignment="Top" Width="315" Click="ButtonDrawGen_Click"/>
-        <Button x:Name="ButtonDebug" Content="Genetic-Bruteforce(shake dataset)" HorizontalAlignment="Left" Margin="1270,167,0,0" VerticalAlignment="Top" Width="315" Click="ButtonDebug_Click"/>
-        <Button x:Name="ButtonStepp" Content="Solve(leap forward X-steps)" HorizontalAlignment="Left" Margin="1270,217,0,0" VerticalAlignment="Top" Width="315" Click="ButtonStepp_Click"/>
-        <Button x:Name="buttonStopThread" Content="Stop" HorizontalAlignment="Left" Margin="1270,242,0,0" VerticalAlignment="Top" Width="315" Click="buttonStopThread_Click"/>
+        <Button x:Name="ButtonDrawGen" Content="Generate genetics object" Margin="0,192,10,0" VerticalAlignment="Top" Click="ButtonDrawGen_Click" HorizontalAlignment="Right" Width="315"/>
+        <Button x:Name="ButtonStepp" Content="Solve(leap forward X-steps)" Margin="0,217,10,0" VerticalAlignment="Top" Click="ButtonStepp_Click" HorizontalAlignment="Right" Width="315"/>
+        <Button x:Name="buttonStopThread" Content="Stop" Margin="0,242,10,0" VerticalAlignment="Top" Click="buttonStopThread_Click" HorizontalAlignment="Right" Width="315"/>
+        <Label x:Name="labelPopCount" Content="" Margin="0,279,10,0" VerticalAlignment="Top" Foreground="#FFDCD6D6" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" HorizontalAlignment="Right" Width="315"/>
 
     </Grid>
 </Window>
