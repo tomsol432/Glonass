@@ -31,5 +31,6 @@ namespace Glonass.Aforge
         {
             base.Selection();
         }
+        
     }
 }

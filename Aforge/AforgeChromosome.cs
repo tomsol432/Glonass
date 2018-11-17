@@ -28,7 +28,7 @@ namespace Glonass.Aforge
 
         public override IChromosome CreateNew()
         {
-            return new AforgeChromosome(this);
+            return new AforgeChromosome(this.order,this.dataset);
         }
         public override IChromosome Clone()
         {

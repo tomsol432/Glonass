@@ -11,8 +11,9 @@ namespace Glonass.Aforge
     class AforgeFitness : IFitnessFunction
     {
         private int[] order = null;
+        public int[] topOrder = null;
         private Vector[] dataset = null;
-
+        public double topScore = double.MaxValue;
         public AforgeFitness(int[] order, Vector[] dataset)
         {
             this.dataset = dataset;
@@ -39,6 +40,12 @@ namespace Glonass.Aforge
                         totalRoad += GetDistance(dataset[order[i]], dataset[order[i + 1]]);
 
                     }
+                    
+            }
+            if(totalRoad < topScore)
+            {
+                topScore = totalRoad;
+                topOrder = order;
             }
             
             return totalRoad;

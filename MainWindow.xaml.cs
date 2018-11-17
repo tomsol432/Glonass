@@ -339,6 +339,9 @@ namespace Glonass
         {
             Vector[] dataset = new Vector[(int)SliderCitiesCounter.Value];
             int[] order = new int[dataset.Length];
+            int[] topOrder = null;
+            double shotrestRoad = double.MaxValue;
+            double topFitness = 0;
             for (int i = 0; i < dataset.Length; i++)
             {
                 dataset[i] = new Vector(r.Next(50,(int) CanvasMap.ActualWidth), r.Next(50,(int) CanvasMap.ActualHeight));
@@ -348,23 +351,90 @@ namespace Glonass
             Aforge.AforgeChromosome aforgeChromosome = new Aforge.AforgeChromosome(order,dataset);
             Aforge.AforgeFitness aforgeFitness = new Aforge.AforgeFitness(order,dataset);
             Aforge.AforgeSelectionMethod aforgeSelectionMethod = new Aforge.AforgeSelectionMethod();
-            Aforge.MyAforgePopulation AforgePopulation = new Aforge.MyAforgePopulation(dataset.Length * 3, aforgeChromosome, aforgeFitness, new EliteSelection());
+            Aforge.MyAforgePopulation AforgePopulation = new Aforge.MyAforgePopulation(dataset.Length * 10, aforgeChromosome, aforgeFitness, new RouletteWheelSelection());
             AforgePopulation.MutationRate = 0.2;
+            AforgePopulation.RandomSelectionPortion = 0.2;
+            
             tbLog.Text = "Population size: " +AforgePopulation.Size.ToString() + "\r\n";
-
-            for (int i = 0; i < 200; i++)
+            Thread aforgeThread = new Thread(() =>
+            {
+            for (int i = 0; i < 20000; i++)
             {
                 //ClearScreen
                 AforgePopulation.RunEpoch(); //ThisMakesOneStepEachIIteration
-                
-                
-                tbLog.Text += AforgePopulation.FitnessAvg + "\r\n";
-                tbLog.ScrollToEnd();
-                AforgePopulation.Mutate();
-                AforgePopulation.Selection();//ThenBestChromosomeShouldBeSelected
-                //  AforgePopulation.Crossover();//NewPopulationShouldBeMade
-                //Mutate'em
-                //DrawWithDispacher
+
+                    if (i % 2000 == 0)
+                    {
+                        tbLog.Dispatcher.Invoke(new Action(() =>
+                        {
+                            tbLog.Text += AforgePopulation.FitnessAvg + " avg\r\n";
+                            tbLog.Text += AforgePopulation.FitnessMax + " max\r\n";
+                            tbLog.Text += topFitness + " Record\r\n";
+                            tbLog.Text += shotrestRoad + " shortestroad\r\n";
+                            
+                            tbLog.ScrollToEnd();
+
+                        }));
+                    }
+                    if(AforgePopulation.FitnessMax > topFitness)
+                    {
+                        topFitness = AforgePopulation.FitnessMax;
+                    }
+                    if(aforgeFitness.topScore < shotrestRoad)
+                    {
+                        shotrestRoad = aforgeFitness.topScore;
+                        topOrder = aforgeFitness.topOrder;
+                        CanvasMap.Dispatcher.Invoke(new Action(() =>
+                        {
+                            CanvasMap.Children.Clear();
+                            DrawRoadsGenetic(dataset, topOrder, sweetBrush, 3);
+                        }));
+                    }
+                    
+                    
+                    AforgePopulation.Mutate();
+                    AforgePopulation.Selection();
+                    //ThenBestChromosomeShouldBeSelected
+                                                 //  AforgePopulation.Crossover();//NewPopulationShouldBeMade
+                                                 //Mutate'em
+                                                 //DrawWithDispacher
+                }
+            });
+            aforgeThread.Start();
+
+        }
+        public void DrawRoadsGenetic(Vector[] array,int[]order, SolidColorBrush brush, int thicc)
+        {
+            for (int i = 0; i < array.Length - 1; i++)
+            {
+                //works almost ok
+                Line line = new Line()
+                {
+                    X1 = array[order[i]].X,
+                    X2 = array[order[i + 1]].X,
+                    Y1 = array[order[i]].Y,
+                    Y2 = array[order[i + 1]].Y,
+                    Fill = null,
+                    Stroke = brush,
+                    StrokeThickness = thicc,
+                };
+                CanvasMap.Dispatcher.Invoke(new Action(() => { CanvasMap.Children.Add(line); }));
+
+                if (i == array.Length - 2)
+                {
+                    Line line2 = new Line()
+                    {
+                        X1 = array[order[i + 1]].X,
+                        X2 = array[order[0]].X,
+                        Y1 = array[order[i + 1]].Y,
+                        Y2 = array[order[0]].Y,
+                        Fill = null,
+                        Stroke = brush,
+                        StrokeThickness = thicc,
+                    };
+                    CanvasMap.Dispatcher.Invoke(new Action(() => { CanvasMap.Children.Add(line2); }));
+
+                }
             }
 
         }

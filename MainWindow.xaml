@@ -17,7 +17,7 @@
         <Button x:Name="ButtonDrawGen" Content="Generate genetics object" Margin="0,192,10,0" VerticalAlignment="Top" Click="ButtonDrawGen_Click" HorizontalAlignment="Right" Width="315"/>
         <Button x:Name="ButtonStepp" Content="Solve(leap forward X-steps)" Margin="0,217,10,0" VerticalAlignment="Top" Click="ButtonStepp_Click" HorizontalAlignment="Right" Width="315"/>
         <Button x:Name="buttonStopThread" Content="Stop" Margin="0,242,10,0" VerticalAlignment="Top" Click="buttonStopThread_Click" HorizontalAlignment="Right" Width="315"/>
-        <Label x:Name="labelPopCount" Content="" Margin="0,279,10,0" VerticalAlignment="Top" Foreground="#FFDCD6D6" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" HorizontalAlignment="Right" Width="315"/>
+        <Label x:Name="labelPopCount" Content="" Margin="0,304,10,0" VerticalAlignment="Top" Foreground="#FFDCD6D6" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" HorizontalAlignment="Right" Width="315"/>
         <Button x:Name="ButtonAforgeBase" Content="Aforge" Margin="0,279,10,0" VerticalAlignment="Top" Click="ButtonAforgeBase_Click" HorizontalAlignment="Right" Width="315"/>
 
     </Grid>
