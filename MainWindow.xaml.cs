@@ -32,6 +32,8 @@ namespace Glonass
         List<Vector[]> AllCombinations = new List<Vector[]>();
         Thread threadGen;
         Genetics genetics;
+        List<GenVector> genVectors;
+        int[] bestOrderFromGenVector;
         #endregion
         #region BrushDef
         SolidColorBrush cityBrush = new SolidColorBrush(Color.FromRgb( 0, 55, 255));
@@ -292,7 +294,7 @@ namespace Glonass
             
             threadGen = new Thread(() => {
                 
-                    for (int j = 0; j < 100000; j++)
+                    for (int j = 0; j < 10000; j++)
                     {
                         genetics.CalculateRoadForEachElementInPopulation(genetics.PopulationData1, tbLog, CanvasMap, sweetBrush, j);
                         labelPopCount.Dispatcher.Invoke(new Action(() => 
@@ -301,21 +303,32 @@ namespace Glonass
 
                     }));
                     }
-                    
+                genVectors = genetics.PopulationData1;
+                bestOrderFromGenVector = genetics.BestOrder;
+              //  DoBruteForce(genetics.DataSet, bestOrderFromGenVector);
                 
             });
             threadGen.Start();
-            
-            
+              
+        }
+
+        private void DoBruteForce(Vector[] dataset, int[] order)
+        {
+            double bestSoFar = genetics.ShortestDistance;
+            for (int i = 0; i < 20000; i++)
+            {
+                CalcRoad(dataset);
+
+            }
+
         }
 
         private void buttonStopThread_Click(object sender, RoutedEventArgs e)
         {
             threadGen.Abort(null);
             CanvasMap.Children.Clear();
-            
-                genetics.DrawGenCities(ref CanvasMap, cityBrush);
-                genetics.DrawBestRoads(CanvasMap, sweetBrush, tbLog);
+            genetics.DrawGenCities(ref CanvasMap, cityBrush);
+            genetics.DrawBestRoads(CanvasMap, sweetBrush, tbLog);
             
             
         }

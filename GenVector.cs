@@ -61,11 +61,14 @@ namespace Glonass
         }
         public int[] MutateOrder()
         {
-            int[] temp;
+            
             int pick = random.Next(0, 100);
             if (pick > 90)
             {
-                temp = Randomiize2ArrayOrder();
+                int[] temp;
+                
+                    temp = Randomiize2ArrayOrder();
+                
                 return temp;
             }
             else
@@ -75,26 +78,33 @@ namespace Glonass
         }
         public int[] Randomiize2ArrayOrder()
         {
-            int randomPlace1 = random.Next(0, order.Length);
-            int randomPlace2 = random.Next(0, order.Length);
-            for (int t = 0; t < Math.Ceiling(order.Length - (order.Length * 0.9)); t++)
+            
+            for (int i = 0; i < 5; i++)
             {
-                var tmp = order[randomPlace1];
-                order[randomPlace1] = order[randomPlace2];
-                order[randomPlace2] = tmp;
+                int randomPlace1 = random.Next(0, order.Length);
+                int randomPlace2 = random.Next(0, order.Length);
+                for (int t = 0; t < Math.Ceiling(order.Length - (order.Length * 0.9)); t++)
+                {
+                    var tmp = order[randomPlace1];
+                    order[randomPlace1] = order[randomPlace2];
+                    order[randomPlace2] = tmp;
+                }
             }
             return order;
 
         }
         public void RandomiizeArrayOrder(int[] order)
         {
-            for (int t = 0; t < order.Length; t++)
+            for (int i = 0; i < 10; i++)
             {
-                
-                var tmp = order[t];
-                int place = random.Next(0, order.Length);
-                order[t] = order[place];
-                order[place] = tmp;
+                for (int t = 0; t < order.Length; t++)
+                {
+
+                    var tmp = order[t];
+                    int place = random.Next(0, order.Length);
+                    order[t] = order[place];
+                    order[place] = tmp;
+                }
             }
         }
 

@@ -26,6 +26,7 @@ namespace Glonass
         internal List<GenVector> PopulationData1 { get => PopulationData; set => PopulationData = value; }
         public double ShortestDistance { get => shortestDistance; set => shortestDistance = value; }
         public int[] BestOrder { get => bestOrder; set => bestOrder = value; }
+        public Vector[] DataSet { get => dataSet; set => dataSet = value; }
 
         public Genetics(ref Canvas canvas, int amountofCities)
         {
@@ -39,29 +40,29 @@ namespace Glonass
         }
         public void DrawGenRoads(Canvas CanvasMap, SolidColorBrush colorBrush)
         {
-            for (int i = 0; i < dataSet.Length - 1; i++)
+            for (int i = 0; i < DataSet.Length - 1; i++)
             {
                 //works almost ok
                 Line line = new Line()
                 {
-                    X1 = dataSet[order[i]].X,
-                    X2 = dataSet[order[i + 1]].X,
-                    Y1 = dataSet[order[i]].Y,
-                    Y2 = dataSet[order[i + 1]].Y,
+                    X1 = DataSet[order[i]].X,
+                    X2 = DataSet[order[i + 1]].X,
+                    Y1 = DataSet[order[i]].Y,
+                    Y2 = DataSet[order[i + 1]].Y,
                     Fill = null,
                     Stroke = colorBrush,
                     StrokeThickness = 4,
                 };
                 CanvasMap.Dispatcher.Invoke(new Action(() => { CanvasMap.Children.Add(line); }));
 
-                if (i == dataSet.Length - 2)
+                if (i == DataSet.Length - 2)
                 {
                     Line line2 = new Line()
                     {
-                        X1 = dataSet[order[i + 1]].X,
-                        X2 = dataSet[order[0]].X,
-                        Y1 = dataSet[order[i + 1]].Y,
-                        Y2 = dataSet[order[0]].Y,
+                        X1 = DataSet[order[i + 1]].X,
+                        X2 = DataSet[order[0]].X,
+                        Y1 = DataSet[order[i + 1]].Y,
+                        Y2 = DataSet[order[0]].Y,
                         Fill = null,
                         Stroke = colorBrush,
                         StrokeThickness = 4,
@@ -78,31 +79,31 @@ namespace Glonass
                 CanvasMap.Children.Clear();
             }));
 
-            for (int i = 0; i < dataSet.Length - 1; i++)
+            for (int i = 0; i < DataSet.Length - 1; i++)
             {
                 //works almost ok
                 CanvasMap.Dispatcher.Invoke(new Action(() => 
                 {
                     Line line = new Line()
                     {
-                        X1 = dataSet[BestOrder[i]].X,
-                        X2 = dataSet[BestOrder[i + 1]].X,
-                        Y1 = dataSet[BestOrder[i]].Y,
-                        Y2 = dataSet[BestOrder[i + 1]].Y,
+                        X1 = DataSet[BestOrder[i]].X,
+                        X2 = DataSet[BestOrder[i + 1]].X,
+                        Y1 = DataSet[BestOrder[i]].Y,
+                        Y2 = DataSet[BestOrder[i + 1]].Y,
                         Fill = null,
                         Stroke = colorBrush,
                         StrokeThickness = 4,
                     };
                     CanvasMap.Dispatcher.Invoke(new Action(() => { CanvasMap.Children.Add(line); }));
 
-                    if (i == dataSet.Length - 2)
+                    if (i == DataSet.Length - 2)
                     {
                         Line line2 = new Line()
                         {
-                            X1 = dataSet[BestOrder[i + 1]].X,
-                            X2 = dataSet[BestOrder[0]].X,
-                            Y1 = dataSet[BestOrder[i + 1]].Y,
-                            Y2 = dataSet[BestOrder[0]].Y,
+                            X1 = DataSet[BestOrder[i + 1]].X,
+                            X2 = DataSet[BestOrder[0]].X,
+                            Y1 = DataSet[BestOrder[i + 1]].Y,
+                            Y2 = DataSet[BestOrder[0]].Y,
                             Fill = null,
                             Stroke = colorBrush,
                             StrokeThickness = 4,
@@ -125,14 +126,14 @@ namespace Glonass
 
         public void DrawGenCities(ref Canvas CanvasMap, SolidColorBrush firstCity)
         {
-            for (int i = 0; i < dataSet.Length; i++)
+            for (int i = 0; i < DataSet.Length; i++)
             {
 
                 Ellipse e = new Ellipse();
                 e.Width = 10;
                 e.Height = 10;
                 e.Fill = firstCity;
-                e.Margin = new Thickness(dataSet[order[i]].X, dataSet[order[i]].Y, 0, 0);
+                e.Margin = new Thickness(DataSet[order[i]].X, DataSet[order[i]].Y, 0, 0);
                 e.Visibility = Visibility.Visible;
                 CanvasMap.Children.Add(e);
 
@@ -141,11 +142,11 @@ namespace Glonass
         public void PushCitiesDataToAllObjects()
         {
 
-            for (int i = 0; i < dataSet.Length; i++)
+            for (int i = 0; i < DataSet.Length; i++)
             {
                 for (int j = 0; j < 20; j++)
                 {
-                    PopulationData1.Add(new GenVector(i, dataSet, order));
+                    PopulationData1.Add(new GenVector(i, DataSet, order));
                 }
                 
             }
@@ -153,10 +154,10 @@ namespace Glonass
         }
         public void GenerateDataSet()
         {
-            dataSet = new Vector[amountOfCities];
-            for (int i = 0; i < dataSet.Length; i++)
+            DataSet = new Vector[amountOfCities];
+            for (int i = 0; i < DataSet.Length; i++)
             {
-                dataSet[i] = new Vector(r.Next(50, (int)CanvasMap.ActualWidth), r.Next(50, (int)CanvasMap.ActualHeight));
+                DataSet[i] = new Vector(r.Next(50, (int)CanvasMap.ActualWidth), r.Next(50, (int)CanvasMap.ActualHeight));
 
             }
         }
@@ -231,7 +232,7 @@ namespace Glonass
             for (int i = PopulationChildrenData.Count; i < SortedPopulationList.Count; i++)
             {
                 
-                PopulationChildrenData.Add(new GenVector(i,dataSet, order));
+                PopulationChildrenData.Add(new GenVector(i,DataSet, order));
             }
             PopulationData = PopulationChildrenData;
             SortedPopulationList = null;
