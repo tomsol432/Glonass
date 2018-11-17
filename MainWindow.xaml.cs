@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
-
+using AForge.Genetic;
 
 namespace Glonass
 {
@@ -34,6 +34,8 @@ namespace Glonass
         Genetics genetics;
         List<GenVector> genVectors;
         int[] bestOrderFromGenVector;
+        
+        
         #endregion
         #region BrushDef
         SolidColorBrush cityBrush = new SolidColorBrush(Color.FromRgb( 0, 55, 255));
@@ -331,6 +333,40 @@ namespace Glonass
             genetics.DrawBestRoads(CanvasMap, sweetBrush, tbLog);
             
             
+        }
+
+        private void ButtonAforgeBase_Click(object sender, RoutedEventArgs e)
+        {
+            Vector[] dataset = new Vector[(int)SliderCitiesCounter.Value];
+            int[] order = new int[dataset.Length];
+            for (int i = 0; i < dataset.Length; i++)
+            {
+                dataset[i] = new Vector(r.Next(50,(int) CanvasMap.ActualWidth), r.Next(50,(int) CanvasMap.ActualHeight));
+                order[i] = i;
+            }
+            
+            Aforge.AforgeChromosome aforgeChromosome = new Aforge.AforgeChromosome(order,dataset);
+            Aforge.AforgeFitness aforgeFitness = new Aforge.AforgeFitness(order,dataset);
+            Aforge.AforgeSelectionMethod aforgeSelectionMethod = new Aforge.AforgeSelectionMethod();
+            Aforge.MyAforgePopulation AforgePopulation = new Aforge.MyAforgePopulation(dataset.Length * 3, aforgeChromosome, aforgeFitness, new EliteSelection());
+            AforgePopulation.MutationRate = 0.2;
+            tbLog.Text = "Population size: " +AforgePopulation.Size.ToString() + "\r\n";
+
+            for (int i = 0; i < 200; i++)
+            {
+                //ClearScreen
+                AforgePopulation.RunEpoch(); //ThisMakesOneStepEachIIteration
+                
+                
+                tbLog.Text += AforgePopulation.FitnessAvg + "\r\n";
+                tbLog.ScrollToEnd();
+                AforgePopulation.Mutate();
+                AforgePopulation.Selection();//ThenBestChromosomeShouldBeSelected
+                //  AforgePopulation.Crossover();//NewPopulationShouldBeMade
+                //Mutate'em
+                //DrawWithDispacher
+            }
+
         }
     }
 }

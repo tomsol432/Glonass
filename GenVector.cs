@@ -10,6 +10,7 @@ namespace Glonass
 {
     class GenVector
     {
+        //slucham psa jak gra
         int id;
         Vector[] Cities;
         int[] order;
@@ -61,7 +62,6 @@ namespace Glonass
         }
         public int[] MutateOrder()
         {
-            
             int pick = random.Next(0, 100);
             if (pick > 90)
             {

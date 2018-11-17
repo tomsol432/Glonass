@@ -55,6 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Aforge\AforgeChromosome.cs" />
+    <Compile Include="Aforge\AforgeFitness.cs" />
+    <Compile Include="Aforge\AforgeSelectionMethod.cs" />
+    <Compile Include="Aforge\MyAforgePopulation.cs" />
     <Compile Include="Genetics.cs" />
     <Compile Include="GenVector.cs" />
     <Page Include="MainWindow.xaml">
