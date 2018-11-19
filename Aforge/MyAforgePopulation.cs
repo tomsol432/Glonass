@@ -34,12 +34,9 @@ namespace Glonass.Aforge
         {
             base.Selection();
         }
-        public void Crossover(MyAforgePopulation myAforgePopulation)
+        public override void Crossover()
         {
-            for (int i = 0; i < myAforgePopulation.size; i++)
-            {
-                myAforgePopulation[i].Crossover(myAforgePopulation[random.Next(0, size)]);
-            }
+            base.Crossover();
         }
 
     }

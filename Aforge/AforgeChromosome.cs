@@ -44,12 +44,14 @@ namespace Glonass.Aforge
                 order[place] = tmp;
             }
         }
-        public void Crossover(AforgeChromosome pair)
+        public override void Crossover(IChromosome pair)
         {
+            var temp = (AforgeChromosome)pair;
+            
             int splitPlace = r.Next(1, order.Length);
             //int[] firstDNA = { };
             //int[] seconDDNA = { };
-            int[] finalDNA = { };
+            int[] finalDNA = new int[order.Length];
             for (int i = 0; i < splitPlace; i++)
             {
                // firstDNA[i] = order[i];
@@ -58,12 +60,13 @@ namespace Glonass.Aforge
             for (int i = splitPlace; i < order.Length; i++)
             {
                // seconDDNA[i] = pair.order[i];
-                finalDNA[i] = pair.order[i];
+                finalDNA[i] = temp.order[i];
             }
 
             if (finalDNA.Length != finalDNA.Distinct().Count())
             {
                 //HAS DUPS
+                Console.WriteLine("dup");
             }
             else
             {

@@ -351,7 +351,7 @@ namespace Glonass
             Aforge.AforgeChromosome aforgeChromosome = new Aforge.AforgeChromosome(order,dataset);
             Aforge.AforgeFitness aforgeFitness = new Aforge.AforgeFitness(order,dataset);
             Aforge.AforgeSelectionMethod aforgeSelectionMethod = new Aforge.AforgeSelectionMethod();
-            Aforge.MyAforgePopulation myAforgePopulation = new Aforge.MyAforgePopulation(dataset.Length * 10, aforgeChromosome, aforgeFitness, new RankSelection());
+            Aforge.MyAforgePopulation myAforgePopulation = new Aforge.MyAforgePopulation(dataset.Length * 10, aforgeChromosome, aforgeFitness, new EliteSelection());
             #region mt
             // Aforge.MyAforgePopulation[] AforgePopulationPool = new Aforge.MyAforgePopulation[1];
             // Thread[] aforgeThreadPool = new Thread[1];
@@ -391,12 +391,13 @@ namespace Glonass
             Thread trainingThread = new Thread(() => 
             {
                 long generation = 0;
+                bool shallBeRunning = true;
                 while (topFitness < 0.0009)
                 {
                     //ClearScreen
 
                     myAforgePopulation.RunEpoch(); //ThisMakesOneStepEachIIteration
-                    if (generation % 1000 == 0)
+                    if (generation % 100 == 0)
                     {
 
                         tbLog.Dispatcher.Invoke(new Action(() =>
@@ -429,7 +430,7 @@ namespace Glonass
 
 
                     myAforgePopulation.Selection();
-                    myAforgePopulation.Crossover(myAforgePopulation);
+                    myAforgePopulation.Crossover();
                     myAforgePopulation.Mutate();
                     
                 }
