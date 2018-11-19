@@ -367,6 +367,7 @@ namespace Glonass
             {
                 myAforgePopulation.MutationRate = double.Parse(tBoxMutationRate.Text);
                 myAforgePopulation.RandomSelectionPortion = double.Parse(tBoxRandomPortion.Text);
+                myAforgePopulation.CrossoverRate = 1;
                 
             }
             catch(Exception ex)
@@ -428,7 +429,7 @@ namespace Glonass
 
 
                     myAforgePopulation.Selection();
-                    myAforgePopulation.Crossover();
+                    myAforgePopulation.Crossover(myAforgePopulation);
                     myAforgePopulation.Mutate();
                     
                 }
