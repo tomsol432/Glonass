@@ -351,7 +351,7 @@ namespace Glonass
             Aforge.AforgeChromosome aforgeChromosome = new Aforge.AforgeChromosome(order,dataset);
             Aforge.AforgeFitness aforgeFitness = new Aforge.AforgeFitness(order,dataset);
             Aforge.AforgeSelectionMethod aforgeSelectionMethod = new Aforge.AforgeSelectionMethod();
-            Aforge.MyAforgePopulation myAforgePopulation = new Aforge.MyAforgePopulation(dataset.Length * 10, aforgeChromosome, aforgeFitness, new EliteSelection());
+            Aforge.MyAforgePopulation myAforgePopulation = new Aforge.MyAforgePopulation(dataset.Length * 10, aforgeChromosome, aforgeFitness, new RouletteWheelSelection());
             #region mt
             // Aforge.MyAforgePopulation[] AforgePopulationPool = new Aforge.MyAforgePopulation[1];
             // Thread[] aforgeThreadPool = new Thread[1];
@@ -367,12 +367,12 @@ namespace Glonass
             {
                 myAforgePopulation.MutationRate = double.Parse(tBoxMutationRate.Text);
                 myAforgePopulation.RandomSelectionPortion = double.Parse(tBoxRandomPortion.Text);
-                myAforgePopulation.CrossoverRate = 1;
+                myAforgePopulation.CrossoverRate = 0.3;
                 
             }
             catch(Exception ex)
             {
-                myAforgePopulation.MutationRate = 0.1;
+                myAforgePopulation.MutationRate = 0.0;
                 myAforgePopulation.RandomSelectionPortion = 0.1;
                 tbLog.Text += ex.ToString() + "\r\n";
                 
@@ -391,7 +391,6 @@ namespace Glonass
             Thread trainingThread = new Thread(() => 
             {
                 long generation = 0;
-                bool shallBeRunning = true;
                 while (topFitness < 0.0009)
                 {
                     //ClearScreen
@@ -429,9 +428,9 @@ namespace Glonass
                     }
 
 
-                    myAforgePopulation.Selection();
-                    myAforgePopulation.Crossover();
-                    myAforgePopulation.Mutate();
+                //    myAforgePopulation.Selection();
+                 //   myAforgePopulation.Crossover();
+                 //   myAforgePopulation.Mutate();
                     
                 }
             });

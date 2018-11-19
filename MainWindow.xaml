@@ -21,7 +21,7 @@
         <Button x:Name="ButtonAforgeBase" Content="Aforge" Margin="0,279,10,0" VerticalAlignment="Top" Click="ButtonAforgeBase_Click" HorizontalAlignment="Right" Width="315"/>
         <CheckBox x:Name="chboxAutoShuffle" Content="AutoShuffle" Margin="0,191,243,0" VerticalAlignment="Top" Foreground="#FFFDFDFD" HorizontalAlignment="Right" Width="82"/>
         <TextBox x:Name="tBoxMutationRate" Height="23" Margin="0,210,10,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Text="0.1" HorizontalAlignment="Right" Width="160"/>
-        <TextBox x:Name="tBoxRandomPortion" Height="23" Margin="0,238,10,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Text="0.1" HorizontalAlignment="Right" Width="160"/>
+        <TextBox x:Name="tBoxRandomPortion" Height="23" Margin="0,238,10,0" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Text="0" HorizontalAlignment="Right" Width="160"/>
         <Label Content="Mutation rate (0.1-1)" Margin="0,210,205,0" VerticalAlignment="Top" Foreground="#FFFDFDFD" HorizontalAlignment="Right" Width="120"/>
         <Label Content="Random portion (0-0.9)" Margin="0,235,191,0" VerticalAlignment="Top" Foreground="#FFFDFDFD" HorizontalAlignment="Right" Width="134"/>
 

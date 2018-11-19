@@ -22,7 +22,7 @@ namespace Glonass.Aforge
 
         public double Evaluate(IChromosome chromosome)
         {
-            return 1 / (PathLength(chromosome) + 1);
+            return 1 / (PathLength(chromosome) + 1 );
             
         }
         public double PathLength(IChromosome chromosome)
