@@ -44,5 +44,9 @@ namespace Glonass.Aforge
                 order[place] = tmp;
             }
         }
+        public override void Crossover(IChromosome pair)
+        {
+            base.Crossover(pair);
+        }
     }
 }

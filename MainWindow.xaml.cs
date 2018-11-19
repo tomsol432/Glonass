@@ -351,36 +351,54 @@ namespace Glonass
             Aforge.AforgeChromosome aforgeChromosome = new Aforge.AforgeChromosome(order,dataset);
             Aforge.AforgeFitness aforgeFitness = new Aforge.AforgeFitness(order,dataset);
             Aforge.AforgeSelectionMethod aforgeSelectionMethod = new Aforge.AforgeSelectionMethod();
-            Aforge.MyAforgePopulation AforgePopulation = new Aforge.MyAforgePopulation(dataset.Length * 10, aforgeChromosome, aforgeFitness, new RouletteWheelSelection());
-            AforgePopulation.MutationRate = 0.5;
-            AforgePopulation.RandomSelectionPortion = 0.2;
-            
-            tbLog.Text = "Population size: " +AforgePopulation.Size.ToString() + "\r\n";
-            Thread aforgeThread = new Thread(() =>
-            {
-            for (int i = 0; i < 20000; i++)
-            {
-                //ClearScreen
-                AforgePopulation.RunEpoch(); //ThisMakesOneStepEachIIteration
+            Aforge.MyAforgePopulation myAforgePopulation = new Aforge.MyAforgePopulation(dataset.Length * 10, aforgeChromosome, aforgeFitness, new RouletteWheelSelection());
+            #region mt
+            // Aforge.MyAforgePopulation[] AforgePopulationPool = new Aforge.MyAforgePopulation[1];
+            // Thread[] aforgeThreadPool = new Thread[1];
 
-                    if (i % 2000 == 0)
+            //for (int i = 0; i < AforgePopulationPool.Length; i++)
+            //{
+            //    AforgePopulationPool[i] = new Aforge.MyAforgePopulation(dataset.Length * 3, aforgeChromosome, aforgeFitness, new EliteSelection());
+            //    AforgePopulationPool[i].MutationRate = 0.5;
+            //    AforgePopulationPool[i].RandomSelectionPortion = 0.05;
+            //}
+            #endregion
+            myAforgePopulation.MutationRate = 0.1;
+            myAforgePopulation.RandomSelectionPortion = 0.1;
+            myAforgePopulation.AutoShuffling = true;
+            
+
+            tbLog.Text = "Population size: " + myAforgePopulation.Size + "\r\n";
+
+            Thread trainingThread = new Thread(() => 
+            {
+                long generation = 0;
+                while (topFitness < 0.0009)
+                {
+                    //ClearScreen
+
+                    myAforgePopulation.RunEpoch(); //ThisMakesOneStepEachIIteration
+                    if (generation % 1000 == 0)
                     {
+
                         tbLog.Dispatcher.Invoke(new Action(() =>
-                        {
-                            tbLog.Text += AforgePopulation.FitnessAvg + " avg\r\n";
-                            tbLog.Text += AforgePopulation.FitnessMax + " max\r\n";
+                    {
+                            tbLog.Text += "Generation: " + generation + "\r\n";
+                            tbLog.Text += myAforgePopulation.FitnessAvg + " avg\r\n";
+                            tbLog.Text += myAforgePopulation.FitnessMax + " max\r\n";
                             tbLog.Text += topFitness + " Record\r\n";
                             tbLog.Text += shotrestRoad + " shortestroad\r\n";
-                            
-                            tbLog.ScrollToEnd();
+                        
+                        //tbLog.ScrollToEnd();
 
-                        }));
+                    }));
                     }
-                    if(AforgePopulation.FitnessMax > topFitness)
+                    generation++;
+                    if (myAforgePopulation.FitnessMax > topFitness)
                     {
-                        topFitness = AforgePopulation.FitnessMax;
+                        topFitness = myAforgePopulation.FitnessMax;
                     }
-                    if(aforgeFitness.topScore < shotrestRoad)
+                    if (aforgeFitness.topScore < shotrestRoad)
                     {
                         shotrestRoad = aforgeFitness.topScore;
                         topOrder = aforgeFitness.topOrder;
@@ -390,19 +408,67 @@ namespace Glonass
                             DrawRoadsGenetic(dataset, topOrder, sweetBrush, 3);
                         }));
                     }
+
+
+                    myAforgePopulation.Selection();
+                    myAforgePopulation.Crossover();
+                    myAforgePopulation.Mutate();
                     
-                    
-                    AforgePopulation.Mutate();
-                    AforgePopulation.Selection();
-                    //ThenBestChromosomeShouldBeSelected
-                                                 //  AforgePopulation.Crossover();//NewPopulationShouldBeMade
-                                                 //Mutate'em
-                                                 //DrawWithDispacher
                 }
             });
-            aforgeThread.Start();
+            trainingThread.Start();
+            #region commentMT
+            //  for (int i = 0; i < aforgeThreadPool.Length; i++)
+            //   {
+            //    aforgeThreadPool[0] = new Thread(() =>
+            //    {
+            //        while (topFitness < 0.0009)
+            //        {
+            //            //ClearScreen
 
+            //            AforgePopulationPool[0].RunEpoch(); //ThisMakesOneStepEachIIteration
+
+
+            //            tbLog.Dispatcher.Invoke(new Action(() =>
+            //            {
+            //                tbLog.Text += AforgePopulationPool[0].FitnessAvg + " avg\r\n";
+            //                tbLog.Text += AforgePopulationPool[0].FitnessMax + " max\r\n";
+            //                tbLog.Text += topFitness + " Record\r\n";
+            //                tbLog.Text += shotrestRoad + " shortestroad\r\n";
+
+            //                tbLog.ScrollToEnd();
+
+            //            }));
+
+            //            if (AforgePopulationPool[0].FitnessMax > topFitness)
+            //            {
+            //                topFitness = AforgePopulationPool[0].FitnessMax;
+            //            }
+            //            if (aforgeFitness.topScore < shotrestRoad)
+            //            {
+            //                shotrestRoad = aforgeFitness.topScore;
+            //                topOrder = aforgeFitness.topOrder;
+            //                CanvasMap.Dispatcher.Invoke(new Action(() =>
+            //                {
+            //                    CanvasMap.Children.Clear();
+            //                    DrawRoadsGenetic(dataset, topOrder, sweetBrush, 3);
+            //                }));
+            //            }
+
+
+            //            AforgePopulationPool[0].Mutate();
+            //            AforgePopulationPool[0].Selection();
+            //            //ThenBestChromosomeShouldBeSelected
+            //            //  AforgePopulation.Crossover();//NewPopulationShouldBeMade
+            //            //Mutate'em
+            //            //DrawWithDispacher
+            //        }
+            //    });
+            //aforgeThreadPool[0].Start();
+            //  }
+            #endregion
         }
+
         public void DrawRoadsGenetic(Vector[] array,int[]order, SolidColorBrush brush, int thicc)
         {
             for (int i = 0; i < array.Length - 1; i++)

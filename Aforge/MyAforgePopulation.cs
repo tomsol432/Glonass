@@ -31,6 +31,10 @@ namespace Glonass.Aforge
         {
             base.Selection();
         }
-        
+        public override void Crossover()
+        {
+            base.Crossover();
+        }
+
     }
 }
