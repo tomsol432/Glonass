@@ -351,7 +351,7 @@ namespace Glonass
             Aforge.AforgeChromosome aforgeChromosome = new Aforge.AforgeChromosome(order,dataset);
             Aforge.AforgeFitness aforgeFitness = new Aforge.AforgeFitness(order,dataset);
             Aforge.AforgeSelectionMethod aforgeSelectionMethod = new Aforge.AforgeSelectionMethod();
-            Aforge.MyAforgePopulation myAforgePopulation = new Aforge.MyAforgePopulation(dataset.Length * 10, aforgeChromosome, aforgeFitness, new RouletteWheelSelection());
+            Aforge.MyAforgePopulation myAforgePopulation = new Aforge.MyAforgePopulation(dataset.Length * 10, aforgeChromosome, aforgeFitness, new RankSelection());
             #region mt
             // Aforge.MyAforgePopulation[] AforgePopulationPool = new Aforge.MyAforgePopulation[1];
             // Thread[] aforgeThreadPool = new Thread[1];
@@ -363,10 +363,27 @@ namespace Glonass
             //    AforgePopulationPool[i].RandomSelectionPortion = 0.05;
             //}
             #endregion
-            myAforgePopulation.MutationRate = 0.1;
-            myAforgePopulation.RandomSelectionPortion = 0.1;
-            myAforgePopulation.AutoShuffling = true;
-            
+            try
+            {
+                myAforgePopulation.MutationRate = double.Parse(tBoxMutationRate.Text);
+                myAforgePopulation.RandomSelectionPortion = double.Parse(tBoxRandomPortion.Text);
+                
+            }
+            catch(Exception ex)
+            {
+                myAforgePopulation.MutationRate = 0.1;
+                myAforgePopulation.RandomSelectionPortion = 0.1;
+                tbLog.Text += ex.ToString() + "\r\n";
+                
+            }
+            if(chboxAutoShuffle.IsChecked == true)
+            {
+                myAforgePopulation.AutoShuffling = true;
+            }
+            else
+            {
+                myAforgePopulation.AutoShuffling = false;
+            }
 
             tbLog.Text = "Population size: " + myAforgePopulation.Size + "\r\n";
 

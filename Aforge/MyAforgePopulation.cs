@@ -13,6 +13,7 @@ namespace Glonass.Aforge
         Aforge.AforgeChromosome ancestor;
         Aforge.AforgeFitness fitnessFunction;
         ISelectionMethod selectionMethod;
+        Random random = new Random();
 
         public MyAforgePopulation(int size, AforgeChromosome ancestor, AforgeFitness fitnessFunction, ISelectionMethod selectionMethod) : base(size, ancestor, fitnessFunction, selectionMethod)
         {
@@ -21,6 +22,7 @@ namespace Glonass.Aforge
             this.fitnessFunction = fitnessFunction;
             this.selectionMethod = selectionMethod;
         }
+        
 
         public override void Mutate()
         {
@@ -33,6 +35,7 @@ namespace Glonass.Aforge
         }
         public override void Crossover()
         {
+            
             base.Crossover();
         }
 

@@ -36,7 +36,7 @@ namespace Glonass.Aforge
         }
         public override void Mutate()
         {
-            for (int t = 0; t < order.Length; t++)
+            for (int t = 0; t < order.Length ; t++)
             {
                 var tmp = order[t];
                 int place = r.Next(0, order.Length);

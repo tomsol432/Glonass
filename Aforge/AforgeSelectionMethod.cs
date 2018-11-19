@@ -13,5 +13,6 @@ namespace Glonass.Aforge
         {
             throw new NotImplementedException();
         }
+        
     }
 }
